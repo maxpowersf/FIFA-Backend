@@ -43,11 +43,31 @@ namespace Ranking.Data
                     .WithMany(e => e.Rankings)
                     .HasForeignKey(e => e.TeamID);
             });
+
+            builder.Entity<Entities.TournamentTypes>(entity =>
+            {
+                entity.HasKey(e => e.TournamentTypeID);
+            });
+
+            builder.Entity<Entities.Tournaments>(entity =>
+            {
+                entity.HasKey(e => e.TournamentID);
+
+                entity.HasOne(e => e.TournamentType)
+                    .WithMany()
+                    .HasForeignKey(e => e.TournamentTypeID);
+
+                entity.HasOne(e => e.Confederation)
+                    .WithMany()
+                    .HasForeignKey(e => e.ConfederationID);
+            });
         }
 
         public virtual DbSet<Entities.MatchTypes> MatchTypes { get; set; }
         public virtual DbSet<Entities.Confederations> Confederations { get; set; }
         public virtual DbSet<Entities.Teams> Teams { get; set; }
         public virtual DbSet<Entities.Rankings> Rankings { get; set; }
+        public virtual DbSet<Entities.TournamentTypes> TournamentTypes { get; set; }
+        public virtual DbSet<Entities.Tournaments> Tournaments { get; set; }
     }
 }
