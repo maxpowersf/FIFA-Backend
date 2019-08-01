@@ -10,5 +10,6 @@ namespace Ranking.Domain
         public string Name { get; set; }
         public string Color { get; set; }
         public decimal Weight { get; set; }
+        private List<Team> Teams { get; set; }
     }
 }

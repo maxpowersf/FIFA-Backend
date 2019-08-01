@@ -29,7 +29,9 @@ namespace Ranking.Data.Repositories
         
         public async Task<Confederation> Get(int id)
         {
-            var confederation = await _ctx.Confederations.FirstOrDefaultAsync(c => c.ConfederationID == id);
+            var confederation = await _ctx.Confederations
+                                            .Include(e => e.Teams)
+                                            .FirstOrDefaultAsync(c => c.ConfederationID == id);
             return _mapper.Map<Confederation>(confederation);
         }
 

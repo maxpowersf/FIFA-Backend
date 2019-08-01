@@ -31,7 +31,7 @@ namespace Ranking.Data
                 entity.HasKey(e => e.TeamID);
 
                 entity.HasOne(e => e.Confederation)
-                    .WithMany()
+                    .WithMany(f => f.Teams)
                     .HasForeignKey(e => e.ConfederationID);
             });
 

@@ -10,5 +10,6 @@ namespace Ranking.Data.Entities
         public string Name { get; set; }
         public string Color { get; set; }
         public decimal Weight { get; set; }
+        public ICollection<Teams> Teams { get; set; }
     }
 }
