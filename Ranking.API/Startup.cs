@@ -77,6 +77,8 @@ namespace Ranking.API
             services.AddTransient<IConfederationRepository, ConfederationRepository>();
             services.AddTransient<ITeamRepository, TeamRepository>();
             services.AddTransient<IRankingRepository, RankingRepository>();
+            services.AddTransient<ITournamentTypeRepository, TournamentTypeRepository>();
+            services.AddTransient<ITournamentRepository, TournamentRepository>();
         }
 
         private void ConfigureApplicationServices(IServiceCollection services)
@@ -85,6 +87,8 @@ namespace Ranking.API
             services.AddTransient<IConfederationService, ConfederationService>();
             services.AddTransient<ITeamService, TeamService>();
             services.AddTransient<IRankingService, RankingService>();
+            services.AddTransient<ITournamentTypeService, TournamentTypeService>();
+            services.AddTransient<ITournamentService, TournamentService>();
         }
     }
 }

@@ -29,6 +29,14 @@ namespace Ranking.API.Mapper
                 .ForMember(e => e.RankingID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
 
             CreateMap<MatchDTO, Match>();
+
+            CreateMap<TournamentTypeDTO, TournamentType>();
+            CreateMap<TournamentType, Data.Entities.TournamentTypes>()
+                .ForMember(e => e.TournamentTypeID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+
+            CreateMap<TournamentDTO, Tournament>();
+            CreateMap<Tournament, Data.Entities.Tournaments>()
+                .ForMember(e => e.TournamentID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
         }
     }
 }

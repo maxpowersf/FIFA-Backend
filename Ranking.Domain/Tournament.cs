@@ -11,8 +11,10 @@ namespace Ranking.Domain
         public int Year { get; set; }
         public string Host { get; set; }
         public int NoOfTeams { get; set; }
+        public int TournamentTypeID { get; set; }
         public TournamentType TournamentType { get; set; }
         public string TournamentTypeName { get { return TournamentType != null ? TournamentType.Name : null; } }
+        public int? ConfederationID { get; set; }
         public Confederation Confederation { get; set; }
         public string ConfederationName { get { return Confederation != null ? Confederation.Name : null; } }
     }
