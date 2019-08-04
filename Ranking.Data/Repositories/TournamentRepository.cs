@@ -5,6 +5,7 @@ using Ranking.Data.Entities;
 using Ranking.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -26,6 +27,7 @@ namespace Ranking.Data.Repositories
             var tournamentList = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
                                         .Include(e => e.Confederation)
+                                        .OrderBy(e => e.Year)
                                         .ToListAsync();
             return _mapper.Map<List<Tournament>>(tournamentList);
         }

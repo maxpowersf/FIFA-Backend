@@ -61,6 +61,19 @@ namespace Ranking.Data
                     .WithMany()
                     .HasForeignKey(e => e.ConfederationID);
             });
+
+            builder.Entity<Entities.Positions>(entity =>
+            {
+                entity.HasKey(e => e.PositionID);
+
+                entity.HasOne(e => e.Tournament)
+                    .WithMany()
+                    .HasForeignKey(e => e.TournamentID);
+
+                entity.HasOne(e => e.Team)
+                    .WithMany()
+                    .HasForeignKey(e => e.TeamID);
+            });
         }
 
         public virtual DbSet<Entities.MatchTypes> MatchTypes { get; set; }
@@ -69,5 +82,6 @@ namespace Ranking.Data
         public virtual DbSet<Entities.Rankings> Rankings { get; set; }
         public virtual DbSet<Entities.TournamentTypes> TournamentTypes { get; set; }
         public virtual DbSet<Entities.Tournaments> Tournaments { get; set; }
+        public virtual DbSet<Entities.Positions> Positions { get; set; }
     }
 }
