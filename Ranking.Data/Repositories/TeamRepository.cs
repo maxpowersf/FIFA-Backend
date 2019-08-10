@@ -49,6 +49,16 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
+        public async Task<List<Team>> GetFirstTeams(int quantity)
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .OrderByDescending(e => e.TotalPoints)
+                                    .Take(quantity)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
         public async Task<Team> Get(int id)
         {
             var team = await _ctx.Teams.AsNoTracking()

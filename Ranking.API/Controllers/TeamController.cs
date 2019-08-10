@@ -11,7 +11,7 @@ using Ranking.Domain;
 
 namespace Ranking.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class TeamController : ControllerBase
     {
@@ -25,9 +25,21 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> GetAll()
         {
             return new OkObjectResult(await _teamService.Get());
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetAllByConfederation(int id)
+        {
+            return new OkObjectResult(await _teamService.GetAllTeamsByConfederation(id));
+        }
+
+        [HttpGet("{quantity}")]
+        public async Task<IActionResult> GetFirstTeams(int quantity)
+        {
+            return new OkObjectResult(await _teamService.GetFirstTeams(quantity));
         }
 
         [HttpGet("{id}")]

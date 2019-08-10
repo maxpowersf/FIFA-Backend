@@ -21,6 +21,16 @@ namespace Ranking.Application.Implementations
             return _teamRepository.Get();
         }
 
+        public async Task<List<Team>> GetAllTeamsByConfederation(int confederationID)
+        {
+            return await _teamRepository.GetAllByConfederation(confederationID);
+        }
+
+        public async Task<List<Team>> GetFirstTeams(int quantity)
+        {
+            return await _teamRepository.GetFirstTeams(quantity);
+        }
+
         public Task<Team> Get(int id)
         {
             return _teamRepository.Get(id);

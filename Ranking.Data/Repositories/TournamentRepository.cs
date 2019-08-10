@@ -28,6 +28,8 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.TournamentType)
                                         .Include(e => e.Confederation)
                                         .OrderBy(e => e.Year)
+                                        .ThenBy(e => e.TournamentType.Name)
+                                        .ThenBy(e => e.Confederation.Name)
                                         .ToListAsync();
             return _mapper.Map<List<Tournament>>(tournamentList);
         }
@@ -55,7 +57,7 @@ namespace Ranking.Data.Repositories
 
         public async Task Delete(int id)
         {
-            var tournamentToDelete = await _ctx.Tournaments.FirstOrDefaultAsync(e => e.TournamentID == id);
+            var tournamentToDelete = await _ctx.Tournaments.FindAsync(id);
             _ctx.Tournaments.Remove(tournamentToDelete);
         }
 

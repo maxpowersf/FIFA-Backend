@@ -8,6 +8,7 @@ namespace Ranking.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string Flag { get; set; }
         public int ConfederationID { get; set; }
         public Confederation Confederation { get; set; }
         public string ConfederationName { get { return Confederation != null ? Confederation.Name : null; } }

@@ -11,6 +11,7 @@ namespace Ranking.Application.Repositories
         Task<List<Team>> Get();
         List<Team> GetOrdered();
         Task<List<Team>> GetAllByConfederation(int confederationID);
+        Task<List<Team>> GetFirstTeams(int quantity);
         Task<Team> Get(int id);
         Task Add(Team team);
         void Update(Team team);

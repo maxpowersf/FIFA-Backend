@@ -8,6 +8,7 @@ namespace Ranking.Data.Entities
     {
         public int TeamID { get; set; }
         public string Name { get; set; }
+        public string Flag { get; set; }
         public int ConfederationID { get; set; }
         public Confederations Confederation { get; set; }
         public int ActualRank { get; set; }

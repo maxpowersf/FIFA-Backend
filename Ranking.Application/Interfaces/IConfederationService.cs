@@ -9,7 +9,6 @@ namespace Ranking.Application.Interfaces
     public interface IConfederationService
     {
         Task<List<Confederation>> Get();
-        Task<List<Team>> GetAllTeamsByConfederation(int confederationID);
         Task<Confederation> Get(int id);
         Task Add(Confederation confederation);
         Task Update(Confederation confederation);

@@ -11,22 +11,15 @@ namespace Ranking.Application.Implementations
     public class ConfederationService : IConfederationService
     {
         private readonly IConfederationRepository _confederationRepository;
-        private readonly ITeamRepository _teamRepository;
 
-        public ConfederationService(IConfederationRepository confederationRepository, ITeamRepository teamRepository)
+        public ConfederationService(IConfederationRepository confederationRepository)
         {
             this._confederationRepository = confederationRepository;
-            this._teamRepository = teamRepository;
         }
 
         public Task<List<Confederation>> Get()
         {
             return _confederationRepository.Get();
-        }
-
-        public async Task<List<Team>> GetAllTeamsByConfederation(int confederationID)
-        {
-            return await _teamRepository.GetAllByConfederation(confederationID);
         }
 
         public Task<Confederation> Get(int id)

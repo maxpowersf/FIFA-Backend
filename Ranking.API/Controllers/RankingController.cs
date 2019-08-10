@@ -11,7 +11,7 @@ using Ranking.Domain;
 
 namespace Ranking.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class RankingController : ControllerBase
     {
@@ -37,6 +37,13 @@ namespace Ranking.API.Controllers
         public async Task<IActionResult> Update()
         {
             await _teamService.UpdateRankings();
+            return new OkObjectResult(true);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FinishPeriod()
+        {
+            //await _teamService.FinishPeriod();
             return new OkObjectResult(true);
         }
     }

@@ -48,7 +48,7 @@ namespace Ranking.Data.Repositories
 
         public async Task Delete (int id)
         {
-            var tournamentTypeToDelete = await _ctx.TournamentTypes.FirstOrDefaultAsync(e => e.TournamentTypeID == id);
+            var tournamentTypeToDelete = await _ctx.TournamentTypes.FindAsync(id);
             _ctx.TournamentTypes.Remove(tournamentTypeToDelete);
         }
 
