@@ -9,7 +9,7 @@ namespace Ranking.Domain
         public int Id { get; set; }
         public int TournamentID { get; set; }
         public Tournament Tournament { get; set; }
-        public int TeamsID { get; set; }
+        public int TeamID { get; set; }
         public Team Team { get; set; }
         public string TeamName { get { return Team != null ? Team.Name : null; } }
         public string Result { get; set; }

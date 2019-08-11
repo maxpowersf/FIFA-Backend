@@ -37,6 +37,7 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Tournament)
                                         .Include(e => e.Team)
                                         .Where(e => e.TeamID == teamId)
+                                        .OrderBy(e => e.Tournament.Year)
                                         .ToListAsync();
             return _mapper.Map<List<Position>>(positions);
         }
@@ -46,7 +47,9 @@ namespace Ranking.Data.Repositories
             var positions = await _ctx.Positions
                                         .Include(e => e.Tournament)
                                         .Include(e => e.Team)
+                                            .ThenInclude(m => m.Confederation)
                                         .Where(e => e.TournamentID == tournamentId)
+                                        .OrderBy(e => e.NoPosition)
                                         .ToListAsync();
             return _mapper.Map<List<Position>>(positions);
         }
