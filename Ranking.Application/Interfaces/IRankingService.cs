@@ -8,6 +8,7 @@ namespace Ranking.Application.Interfaces
 {
     public interface IRankingService
     {
-        Task Add(Match match);
+        Task AddMatch(Match match);
+        Task FinishPeriod();
     }
 }

@@ -27,9 +27,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] MatchDTO matchDTO)
+        public async Task<IActionResult> AddMatch([FromBody] MatchDTO matchDTO)
         {
-            await _rankingService.Add(_mapper.Map<Match>(matchDTO));
+            await _rankingService.AddMatch(_mapper.Map<Match>(matchDTO));
             return new OkObjectResult(true);
         }
 
@@ -43,7 +43,7 @@ namespace Ranking.API.Controllers
         [HttpGet]
         public async Task<IActionResult> FinishPeriod()
         {
-            //await _teamService.FinishPeriod();
+            await _rankingService.FinishPeriod();
             return new OkObjectResult(true);
         }
     }

@@ -20,7 +20,7 @@ namespace Ranking.Application.Implementations
             this._teamRepository = teamRepository;
         }
 
-        public async Task Add(Match match)
+        public async Task AddMatch(Match match)
         {
             Domain.Ranking ranking1 = await _rankingRepository.GetActual(match.Team1Id);
             ranking1.Points += match.Team1Points;
@@ -37,6 +37,30 @@ namespace Ranking.Application.Implementations
             Team team2 = await _teamRepository.Get(match.Team2Id);
             team2.TotalPoints += match.Team2Points;
             _teamRepository.Update(team2);
+
+            await _rankingRepository.SaveChanges();
+        }
+
+        public async Task FinishPeriod()
+        {
+            List<Team> teams = await _teamRepository.Get();
+            foreach(Team team in teams)
+            {
+                int year = team.Ranking3.Year + 4;
+                decimal newPoints = (team.Ranking2.Points * Convert.ToDecimal(0.25)) + (team.Ranking3.Points * Convert.ToDecimal(0.5));
+
+                Domain.Ranking ranking = new Domain.Ranking()
+                {
+                    TeamID = team.Id,
+                    Year = year,
+                    Points = 0
+                };
+
+                await _rankingRepository.Add(ranking);
+
+                team.TotalPoints = newPoints;
+                _teamRepository.Update(team);
+            }
 
             await _rankingRepository.SaveChanges();
         }

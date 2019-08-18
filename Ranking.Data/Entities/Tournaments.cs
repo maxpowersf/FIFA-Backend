@@ -15,5 +15,6 @@ namespace Ranking.Data.Entities
         public TournamentTypes TournamentType { get; set; }
         public int? ConfederationID { get; set; }
         public Confederations Confederation { get; set; }
+        public ICollection<Positions> Positions { get; set; }
     }
 }
