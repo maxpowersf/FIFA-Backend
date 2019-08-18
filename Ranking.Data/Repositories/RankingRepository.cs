@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Ranking.Application.Repositories;
+using Ranking.Data.Entities;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -30,6 +31,12 @@ namespace Ranking.Data.Repositories
             Entities.Rankings rankingUpdated = _mapper.Map<Entities.Rankings>(ranking);
             _ctx.Rankings.Attach(rankingUpdated);
             _ctx.Entry(rankingUpdated).State = EntityState.Modified;
+        }
+
+        public async Task Add(Domain.Ranking ranking)
+        {
+            var rankingToAdd = _mapper.Map<Rankings>(ranking);
+            await _ctx.Rankings.AddAsync(rankingToAdd);
         }
 
         public async Task SaveChanges()

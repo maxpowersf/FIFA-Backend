@@ -67,11 +67,11 @@ namespace Ranking.Data
                 entity.HasKey(e => e.PositionID);
 
                 entity.HasOne(e => e.Tournament)
-                    .WithMany()
+                    .WithMany(f => f.Positions)
                     .HasForeignKey(e => e.TournamentID);
 
                 entity.HasOne(e => e.Team)
-                    .WithMany()
+                    .WithMany(f => f.Positions)
                     .HasForeignKey(e => e.TeamID);
             });
         }

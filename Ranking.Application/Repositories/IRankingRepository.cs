@@ -10,6 +10,7 @@ namespace Ranking.Application.Repositories
     {
         Task<Domain.Ranking> GetActual(int teamId);
         void Update(Domain.Ranking ranking);
+        Task Add(Domain.Ranking ranking);
         Task SaveChanges();
     }
 }

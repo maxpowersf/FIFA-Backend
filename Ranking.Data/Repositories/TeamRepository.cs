@@ -27,6 +27,7 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Confederation)
                                         .Include(e => e.Rankings)
                                         .ToListAsync();
+            teamList.ForEach(x => x.Rankings = x.Rankings.OrderBy(y => y.Year).ToList());
             return _mapper.Map<List<Team>>(teamList);
         }
 
