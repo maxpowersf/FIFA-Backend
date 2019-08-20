@@ -39,7 +39,7 @@ namespace Ranking.API
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
-            //services.AddGraphQLAuth();
+
             services.AddAutoMapper(typeof(Startup));
             this.ConfigureIoC(services);
         }

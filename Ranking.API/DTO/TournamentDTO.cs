@@ -14,5 +14,6 @@ namespace Ranking.API.DTO
         public int NoOfTeams { get; set; }
         public int TournamentTypeID { get; set; }
         public int? ConfederationID { get; set; }
+        public List<PositionDTO> Positions { get; set; }
     }
 }

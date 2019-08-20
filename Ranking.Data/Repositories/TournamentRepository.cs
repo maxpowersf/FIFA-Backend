@@ -38,7 +38,11 @@ namespace Ranking.Data.Repositories
         {
             var tournament = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
+                                        .Include(e => e.Positions)
+                                            .ThenInclude(e => e.Team)
+                                            .ThenInclude(e => e.Confederation)
                                         .FirstOrDefaultAsync(e => e.TournamentID == id);
+            tournament.Positions = tournament.Positions.OrderBy(x => x.NoPosition).ToList();
             return _mapper.Map<Tournament>(tournament);
         }
 
