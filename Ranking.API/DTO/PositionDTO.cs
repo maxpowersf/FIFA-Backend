@@ -18,6 +18,8 @@ namespace Ranking.API.DTO
         public int Loses { get; set; }
         public int GoalsFavor { get; set; }
         public int GoalsAgainst { get; set; }
+        public string Round { get; set; }
+        public string Group { get; set; }
         public bool Qualified { get; set; }
     }
 }

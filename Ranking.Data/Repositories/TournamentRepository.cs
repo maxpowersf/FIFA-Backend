@@ -42,7 +42,10 @@ namespace Ranking.Data.Repositories
                                             .ThenInclude(e => e.Team)
                                             .ThenInclude(e => e.Confederation)
                                         .FirstOrDefaultAsync(e => e.TournamentID == id);
-            tournament.Positions = tournament.Positions.OrderBy(x => x.NoPosition).ToList();
+            tournament.Positions = tournament.Positions.OrderByDescending(x => x.Round)
+                                                        .ThenByDescending(x => x.Qualified)
+                                                        .ThenBy(x => x.NoPosition)
+                                                        .ToList();
             return _mapper.Map<Tournament>(tournament);
         }
 
