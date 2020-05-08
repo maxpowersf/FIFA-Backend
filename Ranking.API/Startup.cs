@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Ranking.Application.Implementations;
 using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
@@ -34,6 +35,20 @@ namespace Ranking.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo
+                {
+                    Version = "v1",
+                    Title = "FIFA Management API",
+                    Description = "This documentation provides information about FIFA Management API endpoints",
+                    Contact = new OpenApiContact()
+                    {
+                        Name = "Paolo Marcolini",
+                        Email = "ingpmarcolini@gmail.com"
+                    }
+                });
+            });
             
             services.Configure<IISOptions>(options =>
             {
@@ -57,6 +72,7 @@ namespace Ranking.API
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
 
             });
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -78,6 +94,11 @@ namespace Ranking.API
 
             app.UseHttpsRedirection();
             app.UseMvc();
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "FIFA Management API");
+            });
         }
 
         private void ConfigureIoC(IServiceCollection services)
