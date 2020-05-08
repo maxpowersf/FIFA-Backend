@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20200508175058_Created Title data model")]
+    partial class CreatedTitledatamodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -121,10 +123,6 @@ namespace Ranking.Data.Migrations
 
                     b.Property<int>("ConfederationID");
 
-                    b.Property<int>("ConfederationTournamentTitles");
-
-                    b.Property<int>("ConfederationsCupTitles");
-
                     b.Property<string>("Flag");
 
                     b.Property<int>("HighestRank");
@@ -135,13 +133,32 @@ namespace Ranking.Data.Migrations
 
                     b.Property<decimal>("TotalPoints");
 
-                    b.Property<int>("WorldCupTitles");
-
                     b.HasKey("TeamID");
 
                     b.HasIndex("ConfederationID");
 
                     b.ToTable("Teams");
+                });
+
+            modelBuilder.Entity("Ranking.Data.Entities.Titles", b =>
+                {
+                    b.Property<int>("TitleID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("NoTitles");
+
+                    b.Property<int>("TeamID");
+
+                    b.Property<int>("TournamentTypeID");
+
+                    b.HasKey("TitleID");
+
+                    b.HasIndex("TeamID");
+
+                    b.HasIndex("TournamentTypeID");
+
+                    b.ToTable("Titles");
                 });
 
             modelBuilder.Entity("Ranking.Data.Entities.TournamentTypes", b =>
@@ -210,6 +227,19 @@ namespace Ranking.Data.Migrations
                     b.HasOne("Ranking.Data.Entities.Confederations", "Confederation")
                         .WithMany("Teams")
                         .HasForeignKey("ConfederationID")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("Ranking.Data.Entities.Titles", b =>
+                {
+                    b.HasOne("Ranking.Data.Entities.Teams", "Team")
+                        .WithMany("Titles")
+                        .HasForeignKey("TeamID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Ranking.Data.Entities.TournamentTypes", "TournamentType")
+                        .WithMany()
+                        .HasForeignKey("TournamentTypeID")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

@@ -60,6 +60,18 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
+        public async Task<List<Team>> GetTeamsWithTitles()
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.WorldCupTitles > 0 || e.ConfederationsCupTitles > 0 || e.ConfederationTournamentTitles > 0)
+                                    .OrderByDescending(e => e.WorldCupTitles)
+                                        .ThenByDescending(e => e.ConfederationTournamentTitles)
+                                        .ThenByDescending(e => e.ConfederationsCupTitles)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
         public async Task<Team> Get(int id)
         {
             var team = await _ctx.Teams.AsNoTracking()

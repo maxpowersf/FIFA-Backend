@@ -31,6 +31,11 @@ namespace Ranking.Application.Implementations
             return await _teamRepository.GetFirstTeams(quantity);
         }
 
+        public async Task<List<Team>> GetTeamsWithTitles()
+        {
+            return await _teamRepository.GetTeamsWithTitles();
+        }
+
         public Task<Team> Get(int id)
         {
             return _teamRepository.Get(id);

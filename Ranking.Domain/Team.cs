@@ -22,5 +22,8 @@ namespace Ranking.Domain
         public Ranking Ranking1 { get { return Rankings.Count > 2 ? Rankings[Rankings.Count - 3] : null; } }
         public Ranking Ranking2 { get { return Rankings.Count > 1 ? Rankings[Rankings.Count - 2] : null; } }
         public Ranking Ranking3 { get { return Rankings.Count > 0 ? Rankings[Rankings.Count - 1] : null; } }
+        public int WorldCupTitles { get; set; }
+        public int ConfederationsCupTitles { get; set; }
+        public int ConfederationTournamentTitles { get; set; }
     }
 }

@@ -11,6 +11,7 @@ namespace Ranking.Application.Interfaces
         Task<List<Team>> Get();
         Task<List<Team>> GetAllTeamsByConfederation(int confederationID);
         Task<List<Team>> GetFirstTeams(int quantity);
+        Task<List<Team>> GetTeamsWithTitles();
         Task<Team> Get(int id);
         Task Add(Team team);
         Task Update(Team team);
