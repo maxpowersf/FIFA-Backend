@@ -23,13 +23,13 @@ namespace Ranking.Data.Repositories
 
         public async Task<List<TournamentType>> Get()
         {
-            var tournamentTypeList = await _ctx.TournamentTypes.ToListAsync();
+            var tournamentTypeList = await _ctx.TournamentTypes.Include(e => e.Confederation).ToListAsync();
             return _mapper.Map<List<TournamentType>>(tournamentTypeList);
         }
 
         public async Task<TournamentType> Get(int id)
         {
-            var tournamentType = await _ctx.TournamentTypes.FirstOrDefaultAsync(e => e.TournamentTypeID == id);
+            var tournamentType = await _ctx.TournamentTypes.Include(e => e.Confederation).FirstOrDefaultAsync(e => e.TournamentTypeID == id);
             return _mapper.Map<TournamentType>(tournamentType);
         }
 

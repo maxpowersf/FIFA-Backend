@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Ranking.Application.Repositories;
+using Ranking.Data.Entities;
 using Ranking.Domain;
 using System;
 using System.Collections.Generic;
@@ -60,14 +61,35 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
-        public async Task<List<Team>> GetTeamsWithTitles()
+        public async Task<List<Team>> GetWorldCupTitles()
         {
             var teamList = await _ctx.Teams
                                     .Include(e => e.Confederation)
-                                    .Where(e => e.WorldCupTitles > 0 || e.ConfederationsCupTitles > 0 || e.ConfederationTournamentTitles > 0)
+                                    .Where(e => e.WorldCupTitles > 0)
                                     .OrderByDescending(e => e.WorldCupTitles)
-                                        .ThenByDescending(e => e.ConfederationTournamentTitles)
-                                        .ThenByDescending(e => e.ConfederationsCupTitles)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetConfederationsCupTitles()
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.ConfederationsCupTitles > 0)
+                                    .OrderByDescending(e => e.ConfederationsCupTitles)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetConfederationTournamentTitles(int confederationID)
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.ConfederationTournamentTitles > 0 && e.ConfederationID == confederationID)
+                                    .OrderByDescending(e => e.ConfederationTournamentTitles)
+                                        .ThenBy(e => e.Name)
                                     .ToListAsync();
             return _mapper.Map<List<Team>>(teamList);
         }

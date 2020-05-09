@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Ranking.API.DTO;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 
 namespace Ranking.API.Mapper
 {
@@ -32,7 +33,8 @@ namespace Ranking.API.Mapper
 
             CreateMap<TournamentTypeDTO, TournamentType>();
             CreateMap<TournamentType, Data.Entities.TournamentTypes>()
-                .ForMember(e => e.TournamentTypeID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+                .ForMember(e => e.TournamentTypeID, opt => opt.MapFrom(e => e.Id)).ReverseMap()
+                .ForMember(e => e.Format, opt => opt.MapFrom(e => (TournamentFormat)e.FormatID));
 
             CreateMap<TournamentDTO, Tournament>();
             CreateMap<Tournament, Data.Entities.Tournaments>()

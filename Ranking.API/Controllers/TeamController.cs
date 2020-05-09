@@ -42,10 +42,10 @@ namespace Ranking.API.Controllers
             return new OkObjectResult(await _teamService.GetFirstTeams(quantity));
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetTeamsWithTitles()
+        [HttpGet("{confederationID}/{tournamenttypeID}")]
+        public async Task<IActionResult> GetTeamsWithTitles(int confederationID = 0, int tournamenttypeID = 0)
         {
-            return new OkObjectResult(await _teamService.GetTeamsWithTitles());
+            return new OkObjectResult(await _teamService.GetTeamsWithTitles(confederationID, tournamenttypeID));
         }
 
         [HttpGet("{id}")]

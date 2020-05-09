@@ -1,6 +1,7 @@
 ﻿using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -11,10 +12,12 @@ namespace Ranking.Application.Implementations
     public class TeamService : ITeamService
     {
         private readonly ITeamRepository _teamRepository;
+        private readonly ITournamentTypeRepository _tournamentTypeRepository;
 
-        public TeamService(ITeamRepository teamRepository)
+        public TeamService(ITeamRepository teamRepository, ITournamentTypeRepository tournamentTypeRepository)
         {
             this._teamRepository = teamRepository;
+            this._tournamentTypeRepository = tournamentTypeRepository;
         }
         public Task<List<Team>> Get()
         {
@@ -31,9 +34,27 @@ namespace Ranking.Application.Implementations
             return await _teamRepository.GetFirstTeams(quantity);
         }
 
-        public async Task<List<Team>> GetTeamsWithTitles()
+        public async Task<List<Team>> GetTeamsWithTitles(int confederationID, int tournamenttypeID)
         {
-            return await _teamRepository.GetTeamsWithTitles();
+            List<Team> teamList;
+            TournamentType tournamentType = await _tournamentTypeRepository.Get(tournamenttypeID);
+            switch (tournamentType.Format)
+            {
+                case TournamentFormat.WorldCup:
+                    teamList = await _teamRepository.GetWorldCupTitles();
+                    break;
+                case TournamentFormat.ConfederationsCup:
+                    teamList = await _teamRepository.GetConfederationsCupTitles();
+                    break;
+                case TournamentFormat.ConfederationTournament:
+                    teamList = await _teamRepository.GetConfederationTournamentTitles(confederationID);
+                    break;
+                default:
+                    teamList = await _teamRepository.Get();
+                    break;
+            }
+
+            return teamList;
         }
 
         public Task<Team> Get(int id)
