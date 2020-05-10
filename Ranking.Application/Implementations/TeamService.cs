@@ -34,27 +34,38 @@ namespace Ranking.Application.Implementations
             return await _teamRepository.GetFirstTeams(quantity);
         }
 
-        public async Task<List<Team>> GetTeamsWithTitles(int confederationID, int tournamenttypeID)
+        public async Task<List<Team>> GetTeamsWithTitles(int tournamenttypeID, int quantity)
         {
             List<Team> teamList;
-            TournamentType tournamentType = await _tournamentTypeRepository.Get(tournamenttypeID);
-            switch (tournamentType.Format)
+            if (tournamenttypeID > 0)
             {
-                case TournamentFormat.WorldCup:
-                    teamList = await _teamRepository.GetWorldCupTitles();
-                    break;
-                case TournamentFormat.ConfederationsCup:
-                    teamList = await _teamRepository.GetConfederationsCupTitles();
-                    break;
-                case TournamentFormat.ConfederationTournament:
-                    teamList = await _teamRepository.GetConfederationTournamentTitles(confederationID);
-                    break;
-                default:
-                    teamList = await _teamRepository.Get();
-                    break;
-            }
+                TournamentType tournamentType = await _tournamentTypeRepository.Get(tournamenttypeID);
+                switch (tournamentType.Format)
+                {
+                    case TournamentFormat.WorldCup:
+                        teamList = await _teamRepository.GetWorldCupTitles();
+                        break;
+                    case TournamentFormat.ConfederationsCup:
+                        teamList = await _teamRepository.GetConfederationsCupTitles();
+                        break;
+                    case TournamentFormat.ConfederationTournament:
+                        teamList = await _teamRepository.GetConfederationTournamentTitles(tournamentType.ConfederationID);
+                        break;
+                    case TournamentFormat.Qualification:
+                        teamList = await _teamRepository.GetWorldCupQualifications();
+                        break;
+                    default:
+                        teamList = await _teamRepository.Get();
+                        break;
+                }
 
-            return teamList;
+                return teamList;
+            }
+            else
+            {
+                teamList = await _teamRepository.GetTeamsWithTitles(quantity);
+                return teamList;
+            }
         }
 
         public Task<Team> Get(int id)

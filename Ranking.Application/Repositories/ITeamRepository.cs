@@ -12,9 +12,11 @@ namespace Ranking.Application.Repositories
         List<Team> GetOrdered();
         Task<List<Team>> GetAllByConfederation(int confederationID);
         Task<List<Team>> GetFirstTeams(int quantity);
+        Task<List<Team>> GetTeamsWithTitles(int quantity);
         Task<List<Team>> GetWorldCupTitles();
         Task<List<Team>> GetConfederationsCupTitles();
         Task<List<Team>> GetConfederationTournamentTitles(int confederationID);
+        Task<List<Team>> GetWorldCupQualifications();
         Task<Team> Get(int id);
         Task Add(Team team);
         void Update(Team team);
