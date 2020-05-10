@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20200509151027_Added fields to tournament types")]
+    partial class Addedfieldstotournamenttypes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -134,8 +136,6 @@ namespace Ranking.Data.Migrations
                     b.Property<string>("Name");
 
                     b.Property<decimal>("TotalPoints");
-
-                    b.Property<int>("WorldCupQualifications");
 
                     b.Property<int>("WorldCupTitles");
 

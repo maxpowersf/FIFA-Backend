@@ -60,6 +60,61 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
+        public async Task<List<Team>> GetTeamsWithTitles(int quantity)
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.WorldCupTitles > 0 || e.ConfederationsCupTitles > 0)
+                                    .OrderByDescending(e => e.WorldCupTitles + e.ConfederationsCupTitles)
+                                        .ThenByDescending(e => e.WorldCupTitles)
+                                    .Take(quantity)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetWorldCupTitles()
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.WorldCupTitles > 0)
+                                    .OrderByDescending(e => e.WorldCupTitles)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetConfederationsCupTitles()
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.ConfederationsCupTitles > 0)
+                                    .OrderByDescending(e => e.ConfederationsCupTitles)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetConfederationTournamentTitles(int confederationID)
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .Where(e => e.ConfederationTournamentTitles > 0 && e.ConfederationID == confederationID)
+                                    .OrderByDescending(e => e.ConfederationTournamentTitles)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
+        public async Task<List<Team>> GetWorldCupQualifications()
+        {
+            var teamList = await _ctx.Teams
+                                    .Include(e => e.Confederation)
+                                    .OrderByDescending(e => e.WorldCupQualifications)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Team>>(teamList);
+        }
+
         public async Task<Team> Get(int id)
         {
             var team = await _ctx.Teams.AsNoTracking()

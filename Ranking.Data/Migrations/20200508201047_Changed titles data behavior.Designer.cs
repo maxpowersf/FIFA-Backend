@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20200508201047_Changed titles data behavior")]
+    partial class Changedtitlesdatabehavior
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -135,8 +137,6 @@ namespace Ranking.Data.Migrations
 
                     b.Property<decimal>("TotalPoints");
 
-                    b.Property<int>("WorldCupQualifications");
-
                     b.Property<int>("WorldCupTitles");
 
                     b.HasKey("TeamID");
@@ -152,17 +152,9 @@ namespace Ranking.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("ConfederationID");
-
-                    b.Property<int>("FormatID");
-
                     b.Property<string>("Name");
 
-                    b.Property<int>("NoTeams");
-
                     b.HasKey("TournamentTypeID");
-
-                    b.HasIndex("ConfederationID");
 
                     b.ToTable("TournamentTypes");
                 });
@@ -221,13 +213,6 @@ namespace Ranking.Data.Migrations
                         .WithMany("Teams")
                         .HasForeignKey("ConfederationID")
                         .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("Ranking.Data.Entities.TournamentTypes", b =>
-                {
-                    b.HasOne("Ranking.Data.Entities.Confederations", "Confederation")
-                        .WithMany()
-                        .HasForeignKey("ConfederationID");
                 });
 
             modelBuilder.Entity("Ranking.Data.Entities.Tournaments", b =>

@@ -47,6 +47,10 @@ namespace Ranking.Data
             builder.Entity<Entities.TournamentTypes>(entity =>
             {
                 entity.HasKey(e => e.TournamentTypeID);
+
+                entity.HasOne(e => e.Confederation)
+                    .WithMany()
+                    .HasForeignKey(e => e.ConfederationID);
             });
 
             builder.Entity<Entities.Tournaments>(entity =>

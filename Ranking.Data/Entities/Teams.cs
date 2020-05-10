@@ -17,5 +17,9 @@ namespace Ranking.Data.Entities
         public decimal TotalPoints { get; set; }
         public virtual ICollection<Rankings> Rankings { get; set; }
         public ICollection<Positions> Positions { get; set; }
+        public int WorldCupTitles { get; set; }
+        public int ConfederationsCupTitles { get; set; }
+        public int ConfederationTournamentTitles { get; set; }
+        public int WorldCupQualifications { get; set; }
     }
 }
