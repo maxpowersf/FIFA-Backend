@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Ranking.Application.Repositories;
-using Ranking.Data.Entities;
 using Ranking.Domain;
 using System;
 using System.Collections.Generic;

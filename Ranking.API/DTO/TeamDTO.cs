@@ -18,5 +18,6 @@ namespace Ranking.API.DTO
         public int WorldCupTitles { get; set; }
         public int ConfederationsCupTitles { get; set; }
         public int ConfederationTournamentTitles { get; set; }
+        public int WorldCupQualifications { get; set; }
     }
 }
