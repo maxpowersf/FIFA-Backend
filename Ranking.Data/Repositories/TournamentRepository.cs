@@ -27,6 +27,7 @@ namespace Ranking.Data.Repositories
             var tournamentList = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
                                         .Include(e => e.Confederation)
+                                        .Include(e => e.Positions)
                                         .OrderBy(e => e.Year)
                                         .ThenBy(e => e.TournamentType.Name)
                                         .ThenBy(e => e.Confederation.Name)
@@ -42,9 +43,9 @@ namespace Ranking.Data.Repositories
                                             .ThenInclude(e => e.Team)
                                             .ThenInclude(e => e.Confederation)
                                         .FirstOrDefaultAsync(e => e.TournamentID == id);
-            tournament.Positions = tournament.Positions.OrderByDescending(x => x.Round)
-                                                        .ThenByDescending(x => x.Qualified)
+            tournament.Positions = tournament.Positions.OrderBy(x => x.Group)
                                                         .ThenBy(x => x.NoPosition)
+                                                        .ThenByDescending(x => x.Qualified)
                                                         .ToList();
             return _mapper.Map<Tournament>(tournament);
         }
