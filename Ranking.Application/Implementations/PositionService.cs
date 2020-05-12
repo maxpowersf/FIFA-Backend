@@ -37,9 +37,13 @@ namespace Ranking.Application.Implementations
             return await _positionRepository.Get(id);
         }
 
-        public async Task Add(Position position)
+        public async Task Add(List<Position> positions)
         {
-            await _positionRepository.Add(position);
+            foreach(Position position in positions)
+            {
+                await _positionRepository.Add(position);
+            }
+            
             await _positionRepository.SaveChanges();
         }
 

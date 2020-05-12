@@ -12,7 +12,7 @@ namespace Ranking.Application.Interfaces
         Task<List<Position>> GetByTeam(int id);
         Task<List<Position>> GetByTournament(int id);
         Task<Position> Get(int id);
-        Task Add(Position position);
+        Task Add(List<Position> positions);
         Task Update(Position position);
         Task Delete(int id);
     }

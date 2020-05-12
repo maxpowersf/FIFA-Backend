@@ -31,10 +31,12 @@ namespace Ranking.API.Mapper
 
             CreateMap<MatchDTO, Match>();
 
-            CreateMap<TournamentTypeDTO, TournamentType>();
+            CreateMap<TournamentTypeDTO, TournamentType>()
+                .ForMember(e => e.Format, opt => opt.MapFrom(e => (TournamentFormat)e.Format));
             CreateMap<TournamentType, Data.Entities.TournamentTypes>()
-                .ForMember(e => e.TournamentTypeID, opt => opt.MapFrom(e => e.Id)).ReverseMap()
-                .ForMember(e => e.Format, opt => opt.MapFrom(e => (TournamentFormat)e.FormatID));
+                .ForMember(e => e.TournamentTypeID, opt => opt.MapFrom(e => e.Id))
+                .ForMember(e => e.FormatID, opt => opt.MapFrom(e => (int)e.Format))
+                    .ReverseMap().ForMember(e => e.Format, opt => opt.MapFrom(e => (TournamentFormat)e.FormatID));
 
             CreateMap<TournamentDTO, Tournament>();
             CreateMap<Tournament, Data.Entities.Tournaments>()
