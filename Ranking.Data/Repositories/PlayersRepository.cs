@@ -1,0 +1,61 @@
+﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+using Ranking.Data.Entities;
+using Ranking.Domain;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace Ranking.Data.Repositories
+{
+    public class PlayersRepository
+    {
+        private readonly RankingContext _ctx;
+        private readonly IMapper _mapper;
+
+        public PlayersRepository(RankingContext ctx, IMapper mapper)
+        {
+            this._ctx = ctx;
+            this._mapper = mapper;
+        }
+
+        public async Task<List<Player>> Get()
+        {
+            var playersList = await _ctx.Players
+                                        .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
+        public async Task<Player> Get(int id)
+        {
+            var player = await _ctx.Players
+                                        .FirstOrDefaultAsync(e => e.PlayerID == id);
+            return _mapper.Map<Player>(player);
+        }
+
+        public async Task Add(Player player)
+        {
+            var playerToAdd = _mapper.Map<Players>(player);
+            await _ctx.Players.AddAsync(playerToAdd);
+        }
+
+        public void Update(Player player)
+        {
+            var playerModified = _mapper.Map<Players>(player);
+            _ctx.Players.Attach(playerModified);
+            _ctx.Entry(playerModified).State = EntityState.Modified;
+        }
+
+        public async Task Delete(int id)
+        {
+            var playerToDelete = await _ctx.Players.FindAsync(id);
+            _ctx.Players.Remove(playerToDelete);
+        }
+
+        public async Task SaveChanges()
+        {
+            await _ctx.SaveChangesAsync();
+        }
+    }
+}
