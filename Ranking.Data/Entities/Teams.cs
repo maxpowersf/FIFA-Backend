@@ -14,6 +14,7 @@ namespace Ranking.Data.Entities
         public int ActualRank { get; set; }
         public int LowestRank { get; set; }
         public int HighestRank { get; set; }
+        public int RankingChange { get; set; }
         public decimal TotalPoints { get; set; }
         public virtual ICollection<Rankings> Rankings { get; set; }
         public ICollection<Positions> Positions { get; set; }

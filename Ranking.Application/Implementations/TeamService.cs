@@ -100,9 +100,11 @@ namespace Ranking.Application.Implementations
                 int newRank = teamsOrdered.IndexOf(team) + 1;
                 int newLowestRank = (newRank > team.LowestRank) ? newRank : team.LowestRank;
                 int newHighestRank = (newRank < team.HighestRank) ? newRank : team.HighestRank;
+                int rankingChange = team.ActualRank - newRank;
                 team.ActualRank = newRank;
                 team.LowestRank = newLowestRank;
                 team.HighestRank = newHighestRank;
+                team.RankingChange = rankingChange;
 
                 _teamRepository.Update(team);
             }
