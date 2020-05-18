@@ -17,6 +17,7 @@ namespace Ranking.Domain
         public int ActualRank { get; set; }
         public int LowestRank { get; set; }
         public int HighestRank { get; set; }
+        public int RankingChange { get; set; }
         public decimal TotalPoints { get; set; }
         public List<Ranking> Rankings { get; set; }
         public Ranking Ranking1 { get { return Rankings.Count > 2 ? Rankings[Rankings.Count - 3] : null; } }
