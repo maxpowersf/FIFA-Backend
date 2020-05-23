@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace Ranking.Data.Entities
+namespace Ranking.API.DTO
 {
-    public class Players
+    public class PlayerDTO
     {
-        public int PlayerID { get; set; }
+        public int Id { get; set; }
         public string Name { get; set; }
-        public int PositionID { get; set; }
+        public int Position { get; set; }
         public int TeamID { get; set; }
-        public Teams Team { get; set; }
         public int Dorsal { get; set; }
         public int ConfederationsGoals { get; set; }
         public int WorldCupGoals { get; set; }

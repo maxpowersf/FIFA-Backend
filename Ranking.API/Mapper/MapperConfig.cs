@@ -25,6 +25,13 @@ namespace Ranking.API.Mapper
             CreateMap<Team, Data.Entities.Teams>()
                 .ForMember(e => e.TeamID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
 
+            CreateMap<PlayerDTO, Player>()
+                .ForMember(e => e.Position, opt => opt.MapFrom(e => (PlayerPosition)e.Position));
+            CreateMap<Player, Data.Entities.Players>()
+                .ForMember(e => e.PlayerID, opt => opt.MapFrom(e => e.Id))
+                .ForMember(e => e.PositionID, opt => opt.MapFrom(e => (int)e.Position))
+                    .ReverseMap().ForMember(e => e.Position, opt => opt.MapFrom(e => (PlayerPosition)e.PositionID));
+
             CreateMap<RankingDTO, Domain.Ranking>();
             CreateMap<Domain.Ranking, Data.Entities.Rankings>()
                 .ForMember(e => e.RankingID, opt => opt.MapFrom(e => e.Id)).ReverseMap();

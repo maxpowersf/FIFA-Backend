@@ -112,6 +112,7 @@ namespace Ranking.API
             services.AddTransient<IMatchTypeRepository, MatchTypeRepository>();
             services.AddTransient<IConfederationRepository, ConfederationRepository>();
             services.AddTransient<ITeamRepository, TeamRepository>();
+            services.AddTransient<IPlayerRepository, PlayersRepository>();
             services.AddTransient<IRankingRepository, RankingRepository>();
             services.AddTransient<ITournamentTypeRepository, TournamentTypeRepository>();
             services.AddTransient<ITournamentRepository, TournamentRepository>();
@@ -123,6 +124,7 @@ namespace Ranking.API
             services.AddTransient<IMatchTypeService, MatchTypeService>();
             services.AddTransient<IConfederationService, ConfederationService>();
             services.AddTransient<ITeamService, TeamService>();
+            services.AddTransient<IPlayerService, PlayerService>();
             services.AddTransient<IRankingService, RankingService>();
             services.AddTransient<ITournamentTypeService, TournamentTypeService>();
             services.AddTransient<ITournamentService, TournamentService>();

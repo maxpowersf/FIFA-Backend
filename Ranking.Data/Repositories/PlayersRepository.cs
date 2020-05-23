@@ -1,15 +1,17 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Ranking.Application.Repositories;
 using Ranking.Data.Entities;
 using Ranking.Domain;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Ranking.Data.Repositories
 {
-    public class PlayersRepository
+    public class PlayersRepository : IPlayerRepository
     {
         private readonly RankingContext _ctx;
         private readonly IMapper _mapper;
@@ -23,6 +25,18 @@ namespace Ranking.Data.Repositories
         public async Task<List<Player>> Get()
         {
             var playersList = await _ctx.Players
+                                        .Include(e => e.Team)
+                                        .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
+        public async Task<List<Player>> GetByTeam(int teamId)
+        {
+            var playersList = await _ctx.Players
+                                        .Include(e => e.Team)
+                                        .Where(e => e.TeamID == teamId)
+                                        .OrderBy(e => e.PositionID)
+                                            .ThenBy(e => e.Name)
                                         .ToListAsync();
             return _mapper.Map<List<Player>>(playersList);
         }
@@ -30,6 +44,7 @@ namespace Ranking.Data.Repositories
         public async Task<Player> Get(int id)
         {
             var player = await _ctx.Players
+                                        .Include(e => e.Team)
                                         .FirstOrDefaultAsync(e => e.PlayerID == id);
             return _mapper.Map<Player>(player);
         }
