@@ -31,6 +31,14 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
+        public async Task<Team> Get(int id)
+        {
+            var team = await _ctx.Teams.AsNoTracking()
+                                    .Include(e => e.Confederation)
+                                    .FirstOrDefaultAsync(c => c.TeamID == id);
+            return _mapper.Map<Team>(team);
+        }
+
         public List<Team> GetOrdered()
         {
             var teamList = _ctx.Teams.AsNoTracking()
@@ -113,14 +121,6 @@ namespace Ranking.Data.Repositories
                                         .ThenBy(e => e.Name)
                                     .ToListAsync();
             return _mapper.Map<List<Team>>(teamList);
-        }
-
-        public async Task<Team> Get(int id)
-        {
-            var team = await _ctx.Teams.AsNoTracking()
-                                    .Include(e => e.Confederation)
-                                    .FirstOrDefaultAsync(c => c.TeamID == id);
-            return _mapper.Map<Team>(team);
         }
 
         public async Task Add(Team team)
