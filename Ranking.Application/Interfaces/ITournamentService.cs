@@ -9,6 +9,7 @@ namespace Ranking.Application.Interfaces
     public interface ITournamentService
     {
         Task<List<Tournament>> Get();
+        Task<List<Tournament>> GetByTeam(int teamId);
         Task<Tournament> Get(int id);
         Task Add(Tournament tournament);
         Task Update(Tournament tournament);

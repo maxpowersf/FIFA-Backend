@@ -22,6 +22,11 @@ namespace Ranking.Application.Implementations
             return _tournamentRepository.Get();
         }
 
+        public Task<List<Tournament>> GetByTeam(int teamId)
+        {
+            return _tournamentRepository.GetByTeam(teamId);
+        }
+
         public Task<Tournament> Get(int id)
         {
             return _tournamentRepository.Get(id);

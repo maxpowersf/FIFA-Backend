@@ -35,6 +35,22 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Tournament>>(tournamentList);
         }
 
+        public async Task<List<Tournament>> GetByTeam(int teamId)
+        {
+            var tournamentList = await _ctx.Tournaments
+                                        .Include(e => e.TournamentType)
+                                        .Include(e => e.Positions)
+                                        .Where(e => e.Positions.Any(f => f.TeamID == teamId))
+                                        .OrderBy(e => e.TournamentType.FormatID)
+                                            .ThenBy(e => e.Year)
+                                        .ToListAsync();
+            foreach(Tournaments tournament in tournamentList)
+            {
+                tournament.Positions = tournament.Positions.Where(e => e.TeamID == teamId).ToList();
+            }
+            return _mapper.Map<List<Tournament>>(tournamentList);
+        }
+
         public async Task<Tournament> Get(int id)
         {
             var tournament = await _ctx.Tournaments
