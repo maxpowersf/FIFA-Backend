@@ -9,6 +9,7 @@ namespace Ranking.Application.Repositories
     public interface ITournamentRepository
     {
         Task<List<Tournament>> Get();
+        Task<List<Tournament>> GetByTeam(int teamId, int confederationId);
         Task<Tournament> Get(int id);
         Task Add(Tournament tournament);
         void Update(Tournament tournament);

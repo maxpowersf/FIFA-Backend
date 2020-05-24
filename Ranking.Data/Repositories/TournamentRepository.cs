@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Ranking.Application.Repositories;
 using Ranking.Data.Entities;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,25 @@ namespace Ranking.Data.Repositories
                                         .ThenBy(e => e.TournamentType.Name)
                                         .ThenBy(e => e.Confederation.Name)
                                         .ToListAsync();
+            return _mapper.Map<List<Tournament>>(tournamentList);
+        }
+
+        public async Task<List<Tournament>> GetByTeam(int teamId, int confederationId)
+        {
+            var tournamentList = await _ctx.Tournaments
+                                        .Include(e => e.TournamentType)
+                                        .Include(e => e.Positions)
+                                        .Where(e => e.Positions.Any(f => f.TeamID == teamId) || 
+                                                e.TournamentType.FormatID == (int)TournamentFormat.WorldCup ||
+                                                e.TournamentType.FormatID == (int)TournamentFormat.ConfederationsCup ||
+                                                e.ConfederationID == confederationId)
+                                        .OrderBy(e => e.TournamentType.FormatID)
+                                            .ThenBy(e => e.Year)
+                                        .ToListAsync();
+            foreach(Tournaments tournament in tournamentList)
+            {
+                tournament.Positions = tournament.Positions.Where(e => e.TeamID == teamId).ToList();
+            }
             return _mapper.Map<List<Tournament>>(tournamentList);
         }
 
