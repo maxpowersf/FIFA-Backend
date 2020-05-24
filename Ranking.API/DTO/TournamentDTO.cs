@@ -11,6 +11,7 @@ namespace Ranking.API.DTO
         public string Name { get; set; }
         public int Year { get; set; }
         public string Host { get; set; }
+        public string HostFlag { get; set; }
         public int NoOfTeams { get; set; }
         public int TournamentTypeID { get; set; }
         public int? ConfederationID { get; set; }

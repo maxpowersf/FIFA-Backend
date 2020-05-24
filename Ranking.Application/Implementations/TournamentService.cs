@@ -11,10 +11,12 @@ namespace Ranking.Application.Implementations
     public class TournamentService : ITournamentService
     {
         private readonly ITournamentRepository _tournamentRepository;
+        private readonly ITeamRepository _teamRepository;
 
-        public TournamentService(ITournamentRepository tournamentRepository)
+        public TournamentService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository)
         {
             this._tournamentRepository = tournamentRepository;
+            this._teamRepository = teamRepository;
         }
 
         public Task<List<Tournament>> Get()
@@ -22,9 +24,11 @@ namespace Ranking.Application.Implementations
             return _tournamentRepository.Get();
         }
 
-        public Task<List<Tournament>> GetByTeam(int teamId)
+        public async Task<List<Tournament>> GetByTeam(int teamId)
         {
-            return _tournamentRepository.GetByTeam(teamId);
+            Team team = await _teamRepository.Get(teamId);
+            List<Tournament> tournamentList = await _tournamentRepository.GetByTeam(team.Id, team.ConfederationID);
+            return tournamentList;
         }
 
         public Task<Tournament> Get(int id)
