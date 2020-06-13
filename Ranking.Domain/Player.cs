@@ -9,11 +9,14 @@ namespace Ranking.Domain
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string FullName { get; set; }
         public PlayerPosition Position { get; set; }
         public string PositionName { get { return Position.ToString(); } }
         public int TeamID { get; set; }
         public Team Team { get; set; }
         public int Dorsal { get; set; }
+        public int QualificationGoals { get; set; }
+        public int ConfederationTournamentGoals { get; set; }
         public int ConfederationsGoals { get; set; }
         public int WorldCupGoals { get; set; }
         public int ConfederationsGoldenBoots { get; set; }

@@ -8,10 +8,13 @@ namespace Ranking.Data.Entities
     {
         public int PlayerID { get; set; }
         public string Name { get; set; }
+        public string FullName { get; set; }
         public int PositionID { get; set; }
         public int TeamID { get; set; }
         public Teams Team { get; set; }
         public int Dorsal { get; set; }
+        public int QualificationGoals { get; set; }
+        public int ConfederationTournamentGoals { get; set; }
         public int ConfederationsGoals { get; set; }
         public int WorldCupGoals { get; set; }
         public int ConfederationsGoldenBoots { get; set; }
