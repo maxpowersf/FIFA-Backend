@@ -87,6 +87,19 @@ namespace Ranking.Data
                     .WithMany(f => f.Positions)
                     .HasForeignKey(e => e.TeamID);
             });
+
+            builder.Entity<Entities.Goalscorers>(entity =>
+            {
+                entity.HasKey(e => e.GoalscorerID);
+
+                entity.HasOne(e => e.Tournament)
+                    .WithMany()
+                    .HasForeignKey(e => e.TournamentID);
+
+                entity.HasOne(e => e.Player)
+                    .WithMany()
+                    .HasForeignKey(e => e.PlayerID);
+            });
         }
 
         public virtual DbSet<Entities.MatchTypes> MatchTypes { get; set; }
@@ -97,5 +110,6 @@ namespace Ranking.Data
         public virtual DbSet<Entities.TournamentTypes> TournamentTypes { get; set; }
         public virtual DbSet<Entities.Tournaments> Tournaments { get; set; }
         public virtual DbSet<Entities.Positions> Positions { get; set; }
+        public virtual DbSet<Entities.Goalscorers> Goalscorers { get; set; }
     }
 }

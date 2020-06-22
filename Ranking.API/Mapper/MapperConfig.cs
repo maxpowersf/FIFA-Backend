@@ -52,6 +52,10 @@ namespace Ranking.API.Mapper
             CreateMap<PositionDTO, Position>();
             CreateMap<Position, Data.Entities.Positions>()
                 .ForMember(e => e.PositionID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+
+            CreateMap<GoalscorerDTO, Goalscorer>();
+            CreateMap<Goalscorer, Data.Entities.Goalscorers>()
+                .ForMember(e => e.GoalscorerID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
         }
     }
 }
