@@ -11,12 +11,12 @@ using System.Threading.Tasks;
 
 namespace Ranking.Data.Repositories
 {
-    public class PlayersRepository : IPlayerRepository
+    public class PlayerRepository : IPlayerRepository
     {
         private readonly RankingContext _ctx;
         private readonly IMapper _mapper;
 
-        public PlayersRepository(RankingContext ctx, IMapper mapper)
+        public PlayerRepository(RankingContext ctx, IMapper mapper)
         {
             this._ctx = ctx;
             this._mapper = mapper;
