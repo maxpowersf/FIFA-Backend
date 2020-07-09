@@ -66,6 +66,7 @@ namespace Ranking.Data.Repositories
             tournament.Positions = tournament.Positions.OrderBy(x => x.Group)
                                                         .ThenBy(x => x.NoPosition)
                                                         .ThenByDescending(x => x.Qualified)
+                                                        .ThenByDescending(x => x.Round)
                                                         .ToList();
             return _mapper.Map<Tournament>(tournament);
         }
