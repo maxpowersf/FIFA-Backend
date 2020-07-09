@@ -36,6 +36,7 @@ namespace Ranking.Data.Repositories
             var goalscorers = await _ctx.Goalscorers
                                         .Include(e => e.Tournament)
                                         .Include(e => e.Player)
+                                            .ThenInclude(f => f.Team)
                                         .Where(e => e.TournamentID == tournamentId)
                                         .OrderByDescending(e => e.Goals)
                                         .ToListAsync();
