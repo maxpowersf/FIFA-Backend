@@ -41,6 +41,50 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Player>>(playersList);
         }
 
+        public async Task<List<Player>> GetWorldCupGoals()
+        {
+            var playersList = await _ctx.Players
+                                    .Include(e => e.Team)
+                                    .Where(e => e.WorldCupGoals > 0)
+                                    .OrderByDescending(e => e.WorldCupGoals)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
+        public async Task<List<Player>> GetConfederationsCupGoals()
+        {
+            var playersList = await _ctx.Players
+                                    .Include(e => e.Team)
+                                    .Where(e => e.ConfederationsGoals > 0)
+                                    .OrderByDescending(e => e.ConfederationsGoals)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
+        public async Task<List<Player>> GetConfederationTournamentGoals(int confederationID)
+        {
+            var playersList = await _ctx.Players
+                                    .Include(e => e.Team)
+                                    .Where(e => e.ConfederationTournamentGoals > 0 && e.Team.ConfederationID == confederationID)
+                                    .OrderByDescending(e => e.ConfederationTournamentGoals)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
+        public async Task<List<Player>> GetQualificationGoals()
+        {
+            var playersList = await _ctx.Players
+                                    .Include(e => e.Team)
+                                    .Where(e => e.QualificationGoals > 0)
+                                    .OrderByDescending(e => e.QualificationGoals)
+                                        .ThenBy(e => e.Name)
+                                    .ToListAsync();
+            return _mapper.Map<List<Player>>(playersList);
+        }
+
         public async Task<Player> Get(int id)
         {
             var player = await _ctx.Players
