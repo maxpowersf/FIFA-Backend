@@ -36,6 +36,12 @@ namespace Ranking.API.Controllers
             return new OkObjectResult(await _tournamentService.GetByTeam(teamId));
         }
 
+        [HttpGet("{tournamentTypeId}")]
+        public async Task<IActionResult> GetByTournamentType(int tournamentTypeId)
+        {
+            return new OkObjectResult(await _tournamentService.GetByTournamentType(tournamentTypeId));
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

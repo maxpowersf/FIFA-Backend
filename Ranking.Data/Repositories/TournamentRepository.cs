@@ -48,10 +48,30 @@ namespace Ranking.Data.Repositories
                                         .OrderBy(e => e.TournamentType.FormatID)
                                             .ThenBy(e => e.Year)
                                         .ToListAsync();
-            foreach(Tournaments tournament in tournamentList)
+
+            foreach (Tournaments tournament in tournamentList)
             {
                 tournament.Positions = tournament.Positions.Where(e => e.TeamID == teamId).ToList();
             }
+
+            return _mapper.Map<List<Tournament>>(tournamentList);
+        }
+
+        public async Task<List<Tournament>> GetByTournamentType(int tournamentTypeId)
+        {
+            var tournamentList = await _ctx.Tournaments
+                                        .Include(e => e.TournamentType)
+                                        .Include(e => e.Positions)
+                                            .ThenInclude(e => e.Team)
+                                        .Where(e => e.TournamentTypeID == tournamentTypeId && e.Positions.Count > 0)
+                                        .OrderBy(e => e.Year)
+                                        .ToListAsync();
+
+            foreach (Tournaments tournament in tournamentList)
+            {
+                tournament.Positions = tournament.Positions.OrderBy(e => e.NoPosition).Take(4).ToList();
+            }
+
             return _mapper.Map<List<Tournament>>(tournamentList);
         }
 

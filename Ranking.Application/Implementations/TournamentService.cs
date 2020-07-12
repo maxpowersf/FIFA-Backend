@@ -31,6 +31,12 @@ namespace Ranking.Application.Implementations
             return tournamentList;
         }
 
+        public async Task<List<Tournament>> GetByTournamentType(int TournamentTypeId)
+        {
+            List<Tournament> tournamentList = await _tournamentRepository.GetByTournamentType(TournamentTypeId);
+            return tournamentList;
+        }
+
         public Task<Tournament> Get(int id)
         {
             return _tournamentRepository.Get(id);

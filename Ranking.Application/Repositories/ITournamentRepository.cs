@@ -10,6 +10,7 @@ namespace Ranking.Application.Repositories
     {
         Task<List<Tournament>> Get();
         Task<List<Tournament>> GetByTeam(int teamId, int confederationId);
+        Task<List<Tournament>> GetByTournamentType(int tournamentTypeId);
         Task<Tournament> Get(int id);
         Task Add(Tournament tournament);
         void Update(Tournament tournament);
