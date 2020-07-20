@@ -83,11 +83,16 @@ namespace Ranking.Data.Repositories
                                             .ThenInclude(e => e.Team)
                                             .ThenInclude(e => e.Confederation)
                                         .FirstOrDefaultAsync(e => e.TournamentID == id);
-            tournament.Positions = tournament.Positions.OrderBy(x => x.Group)
-                                                        .ThenBy(x => x.NoPosition)
-                                                        .ThenByDescending(x => x.Qualified)
-                                                        .ThenByDescending(x => x.Round)
-                                                        .ToList();
+
+            if (tournament != null)
+            {
+                tournament.Positions = tournament.Positions.OrderBy(x => x.Group)
+                                                            .ThenBy(x => x.NoPosition)
+                                                            .ThenByDescending(x => x.Qualified)
+                                                            .ThenByDescending(x => x.Round)
+                                                            .ToList();
+            }
+
             return _mapper.Map<Tournament>(tournament);
         }
 

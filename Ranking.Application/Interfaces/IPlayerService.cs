@@ -12,6 +12,7 @@ namespace Ranking.Application.Interfaces
         Task<List<Player>> GetByTeam(int teamId);
         Task<List<Player>> GetPlayersWithGoals(int tournamentTypeId);
         Task<Player> Get(int id);
+        Task<Player> Get(string name, string teamName);
         Task Add(Player player);
         Task Update(Player player);
         Task Delete(int id);

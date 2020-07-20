@@ -1,6 +1,7 @@
 ﻿using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,11 +13,13 @@ namespace Ranking.Application.Implementations
     {
         private readonly IGoalscorerRepository _goalscorerRepository;
         private readonly ITournamentRepository _tournamentRepository;
+        private readonly IPlayerRepository _playerRepository;
 
-        public GoalscorerService(IGoalscorerRepository goalscorerRepository, ITournamentRepository tournamentRepository)
+        public GoalscorerService(IGoalscorerRepository goalscorerRepository, ITournamentRepository tournamentRepository, IPlayerRepository playerRepository)
         {
             this._goalscorerRepository = goalscorerRepository;
             this._tournamentRepository = tournamentRepository;
+            this._playerRepository = playerRepository;
         }
 
         public async Task<List<Goalscorer>> Get()
@@ -41,27 +44,26 @@ namespace Ranking.Application.Implementations
             {
                 await _goalscorerRepository.Add(goalscorer);
 
-                /*if (position.Qualified || position.NoPosition == 1)
+                Player player = await _playerRepository.Get(goalscorer.PlayerID);
+                switch (tournament.TournamentType.Format)
                 {
-                    Team team = await _teamRepository.Get(position.TeamID);
-                    switch (tournament.TournamentType.Format)
-                    {
-                        case TournamentFormat.Qualification:
-                            team.WorldCupQualifications++;
-                            break;
-                        case TournamentFormat.WorldCup:
-                            team.WorldCupTitles++;
-                            break;
-                        case TournamentFormat.ConfederationsCup:
-                            team.ConfederationsCupTitles++;
-                            break;
-                        case TournamentFormat.ConfederationTournament:
-                            team.ConfederationTournamentTitles++;
-                            break;
-                    }
+                    case TournamentFormat.Qualification:
+                        player.QualificationGoals += goalscorer.Goals;
+                        break;
+                    case TournamentFormat.WorldCup:
+                        player.WorldCupGoals += goalscorer.Goals;
+                        if (goalscorer.GoldenBoot) player.WorldCupGoldenBoots++;
+                        break;
+                    case TournamentFormat.ConfederationsCup:
+                        player.ConfederationsGoals += goalscorer.Goals;
+                        if (goalscorer.GoldenBoot) player.ConfederationsGoldenBoots++;
+                        break;
+                    case TournamentFormat.ConfederationTournament:
+                        player.ConfederationTournamentGoals += goalscorer.Goals;
+                        break;
+                }
 
-                    _teamRepository.Update(team);
-                }*/
+                _playerRepository.Update(player);
             }
 
             await _goalscorerRepository.SaveChanges();

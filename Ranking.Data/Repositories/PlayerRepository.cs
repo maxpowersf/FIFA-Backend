@@ -87,9 +87,17 @@ namespace Ranking.Data.Repositories
 
         public async Task<Player> Get(int id)
         {
-            var player = await _ctx.Players
+            var player = await _ctx.Players.AsNoTracking()
                                         .Include(e => e.Team)
                                         .FirstOrDefaultAsync(e => e.PlayerID == id);
+            return _mapper.Map<Player>(player);
+        }
+
+        public async Task<Player> Get(string name, string teamName)
+        {
+            var player = await _ctx.Players.AsNoTracking()
+                                        .Include(e => e.Team)
+                                        .FirstOrDefaultAsync(e => e.Name == name && e.Team.Name == teamName);
             return _mapper.Map<Player>(player);
         }
 

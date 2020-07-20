@@ -61,6 +61,11 @@ namespace Ranking.Application.Implementations
             return _playerRepository.Get(id);
         }
 
+        public Task<Player> Get(string name, string teamName)
+        {
+            return _playerRepository.Get(name, teamName);
+        }
+
         public async Task Add(Player player)
         {
             await _playerRepository.Add(player);

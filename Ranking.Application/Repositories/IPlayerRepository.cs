@@ -15,6 +15,7 @@ namespace Ranking.Application.Repositories
         Task<List<Player>> GetConfederationTournamentGoals(int confederationID);
         Task<List<Player>> GetQualificationGoals();
         Task<Player> Get(int id);
+        Task<Player> Get(string name, string teamName);
         Task Add(Player player);
         void Update(Player player);
         Task Delete(int id);

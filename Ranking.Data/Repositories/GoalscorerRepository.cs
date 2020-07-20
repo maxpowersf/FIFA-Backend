@@ -39,6 +39,7 @@ namespace Ranking.Data.Repositories
                                             .ThenInclude(f => f.Team)
                                         .Where(e => e.TournamentID == tournamentId)
                                         .OrderByDescending(e => e.Goals)
+                                            .ThenBy(e => e.Player.Name)
                                         .ToListAsync();
             return _mapper.Map<List<Goalscorer>>(goalscorers);
         }
