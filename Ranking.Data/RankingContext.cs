@@ -21,6 +21,29 @@ namespace Ranking.Data
                 entity.HasKey(e => e.MatchTypeID);
             });
 
+            builder.Entity<Entities.Matches>(entity =>
+            {
+                entity.HasKey(e => e.MatchID);
+
+                entity.HasOne(e => e.MatchType)
+                    .WithMany()
+                    .HasForeignKey(e => e.MatchTypeID);
+
+                entity.HasOne(e => e.Tournament)
+                    .WithMany()
+                    .HasForeignKey(e => e.TournamentID);
+
+                entity.HasOne(e => e.Team1)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team1ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Team2)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team2ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
             builder.Entity<Entities.Confederations>(entity =>
             {
                 entity.HasKey(e => e.ConfederationID);
@@ -100,9 +123,58 @@ namespace Ranking.Data
                     .WithMany()
                     .HasForeignKey(e => e.PlayerID);
             });
+
+            builder.Entity<Entities.TeamStats>(entity =>
+            {
+                entity.HasKey(e => e.TeamStatsID);
+
+                entity.HasOne(e => e.Team)
+                    .WithMany()
+                    .HasForeignKey(e => e.TeamID);
+            });
+
+            builder.Entity<Entities.TeamStatsWorldCup>(entity =>
+            {
+                entity.HasKey(e => e.TeamStatsWorldCupID);
+
+                entity.HasOne(e => e.Team)
+                    .WithMany()
+                    .HasForeignKey(e => e.TeamID);
+            });
+
+            builder.Entity<Entities.H2H>(entity =>
+            {
+                entity.HasKey(e => e.H2HID);
+
+                entity.HasOne(e => e.Team1)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team1ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Team2)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team2ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
+
+            builder.Entity<Entities.H2HWorldCup>(entity =>
+            {
+                entity.HasKey(e => e.H2HWorldCupID);
+
+                entity.HasOne(e => e.Team1)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team1ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+
+                entity.HasOne(e => e.Team2)
+                    .WithMany()
+                    .HasForeignKey(e => e.Team2ID)
+                    .OnDelete(DeleteBehavior.Restrict);
+            });
         }
 
         public virtual DbSet<Entities.MatchTypes> MatchTypes { get; set; }
+        public virtual DbSet<Entities.Matches> Matches { get; set; }
         public virtual DbSet<Entities.Confederations> Confederations { get; set; }
         public virtual DbSet<Entities.Teams> Teams { get; set; }
         public virtual DbSet<Entities.Players> Players { get; set; }
@@ -111,5 +183,9 @@ namespace Ranking.Data
         public virtual DbSet<Entities.Tournaments> Tournaments { get; set; }
         public virtual DbSet<Entities.Positions> Positions { get; set; }
         public virtual DbSet<Entities.Goalscorers> Goalscorers { get; set; }
+        public virtual DbSet<Entities.TeamStats> TeamStats { get; set; }
+        public virtual DbSet<Entities.TeamStatsWorldCup> TeamStatsWorldCup { get; set; }
+        public virtual DbSet<Entities.H2H> H2H { get; set; }
+        public virtual DbSet<Entities.H2HWorldCup> H2HWorldCup { get; set; }
     }
 }
