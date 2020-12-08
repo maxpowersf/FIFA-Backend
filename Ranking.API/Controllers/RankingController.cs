@@ -27,6 +27,13 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPost]
+        public async Task<IActionResult> AddMatchRanking([FromBody] MatchDTO matchDTO)
+        {
+            await _rankingService.AddMatchRanking(_mapper.Map<MatchRanking>(matchDTO));
+            return new OkObjectResult(true);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> AddMatch([FromBody] MatchDTO matchDTO)
         {
             await _rankingService.AddMatch(_mapper.Map<Match>(matchDTO));
