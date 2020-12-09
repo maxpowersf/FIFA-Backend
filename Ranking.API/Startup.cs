@@ -112,6 +112,7 @@ namespace Ranking.API
             services.AddTransient<ITournamentRepository, TournamentRepository>();
             services.AddTransient<IPositionRepository, PositionRepository>();
             services.AddTransient<IGoalscorerRepository, GoalscorerRepository>();
+            services.AddTransient<ITeamStatRepository, TeamStatRepository>();
         }
 
         private void ConfigureApplicationServices(IServiceCollection services)

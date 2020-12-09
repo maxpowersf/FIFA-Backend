@@ -9,6 +9,7 @@ namespace Ranking.Domain
         public int Id { get; set; }
         public int TeamID { get; set; }
         public Team Team { get; set; }
+        public int Points { get; set; }
         public int GamesPlayed { get; set; }
         public int Wins { get; set; }
         public int Draws { get; set; }

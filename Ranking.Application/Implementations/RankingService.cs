@@ -15,12 +15,17 @@ namespace Ranking.Application.Implementations
         private readonly IRankingRepository _rankingRepository;
         private readonly ITeamRepository _teamRepository;
         private readonly IMatchTypeRepository _matchTypeRepository;
+        private readonly ITeamStatRepository _teamStatRepository;
 
-        public RankingService(IRankingRepository rankingRepository, ITeamRepository teamRepository, IMatchTypeRepository matchTypeRepository)
+        public RankingService(IRankingRepository rankingRepository, 
+            ITeamRepository teamRepository, 
+            IMatchTypeRepository matchTypeRepository,
+            ITeamStatRepository teamStatRepository)
         {
             this._rankingRepository = rankingRepository;
             this._teamRepository = teamRepository;
             this._matchTypeRepository = matchTypeRepository;
+            this._teamStatRepository = teamStatRepository;
         }
 
         public async Task AddMatchRanking(MatchRanking match)
@@ -73,10 +78,18 @@ namespace Ranking.Application.Implementations
             #endregion
 
             #region Update Team Stats
-            //Save Team Stats
+            var team1Stat = _teamStatRepository.GetOrCreateByTeam(match.Team1ID);
+            var team2Stat = _teamStatRepository.GetOrCreateByTeam(match.Team2ID);
+
+            CompleteTeamsStat(match, ref team1Stat, ref team2Stat);
+
+            _teamStatRepository.Update(team1Stat);
+            _teamStatRepository.Update(team2Stat);
             #endregion
 
             //Save Match
+
+            await _rankingRepository.SaveChanges();
         }
 
         public async Task FinishPeriod()
@@ -161,6 +174,39 @@ namespace Ranking.Application.Implementations
             decimal oposition = (200 - (decimal)teamRank) / 100;
 
             return oposition;
+        }
+
+        private void CompleteTeamsStat(Match match, ref TeamStat team1Stat, ref TeamStat team2Stat)
+        {
+            if(match.GoalsTeam1 > match.GoalsTeam2)
+            {
+                team1Stat.Wins++;
+                team2Stat.Loses++;
+            }
+            else if(match.GoalsTeam2 > match.GoalsTeam1)
+            {
+                team2Stat.Wins++;
+                team1Stat.Loses++;
+            }
+            else
+            {
+                team1Stat.Draws++;
+                team2Stat.Draws++;
+            }
+
+            team1Stat.Points = team1Stat.Wins * 3 + team1Stat.Draws;
+            team1Stat.GamesPlayed++;
+            team1Stat.GoalsFavor += match.GoalsTeam1;
+            team1Stat.GoalsAgainst += match.GoalsTeam2;
+            team1Stat.GoalDifference = team1Stat.GoalsFavor - team1Stat.GoalsAgainst;
+            team1Stat.Effectiveness = Math.Round((((decimal)team1Stat.Wins * 3) + (decimal)team1Stat.Draws) / ((decimal)team1Stat.GamesPlayed * 3) * 100, 2);
+
+            team2Stat.Points = team2Stat.Wins * 3 + team2Stat.Draws;
+            team2Stat.GamesPlayed++;
+            team2Stat.GoalsFavor += match.GoalsTeam2;
+            team2Stat.GoalsAgainst += match.GoalsTeam1;
+            team2Stat.GoalDifference = team2Stat.GoalsFavor - team2Stat.GoalsAgainst;
+            team2Stat.Effectiveness = Math.Round((((decimal)team2Stat.Wins * 3) + (decimal)team2Stat.Draws) / ((decimal)team2Stat.GamesPlayed * 3) * 100, 2);
         }
 
         private MatchResult GetMatchResult(Match match)

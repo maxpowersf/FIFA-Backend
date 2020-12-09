@@ -9,6 +9,7 @@ namespace Ranking.Data.Entities
         public int TeamStatsID { get; set; }
         public int TeamID { get; set; }
         public Teams Team { get; set; }
+        public int Points { get; set; }
         public int GamesPlayed { get; set; }
         public int Wins { get; set; }
         public int Draws { get; set; }
