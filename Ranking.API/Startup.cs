@@ -52,7 +52,9 @@ namespace Ranking.API
             services.AddAuthorization();
             services.AddDbContext<RankingContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                        .EnableSensitiveDataLogging(true);
             });
 
             services.AddAutoMapper(typeof(Startup));
@@ -113,6 +115,10 @@ namespace Ranking.API
             services.AddTransient<IPositionRepository, PositionRepository>();
             services.AddTransient<IGoalscorerRepository, GoalscorerRepository>();
             services.AddTransient<ITeamStatRepository, TeamStatRepository>();
+            services.AddTransient<ITeamStatWorldCupRepository, TeamStatWorldCupRepository>();
+            services.AddTransient<IH2HRepository, H2HRepository>();
+            services.AddTransient<IH2HWorldCupRepository, H2HWorldCupRepository>();
+            services.AddTransient<IMatchRepository, MatchRepository>();
         }
 
         private void ConfigureApplicationServices(IServiceCollection services)

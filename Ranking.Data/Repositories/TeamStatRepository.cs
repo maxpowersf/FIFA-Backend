@@ -43,7 +43,6 @@ namespace Ranking.Data.Repositories
         public TeamStat GetOrCreateByTeam(int teamId)
         {
             var teamStat = _ctx.TeamStats.AsNoTracking()
-                                        .Include(e => e.Team)
                                         .FirstOrDefault(e => e.TeamID == teamId);
 
             if(teamStat == null)
@@ -54,7 +53,11 @@ namespace Ranking.Data.Repositories
                 };
 
                 var createdTeamStat = _ctx.TeamStats.Add(teamStatToAdd);
-                teamStat = createdTeamStat.Entity;
+                _ctx.SaveChanges();
+                _ctx.Entry(teamStatToAdd).State = EntityState.Detached;
+
+                teamStat = _ctx.TeamStats.AsNoTracking()
+                                        .FirstOrDefault(e => e.TeamID == teamId);
             }
 
             return _mapper.Map<TeamStat>(teamStat);

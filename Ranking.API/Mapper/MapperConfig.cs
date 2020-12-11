@@ -64,6 +64,15 @@ namespace Ranking.API.Mapper
 
             CreateMap<TeamStat, Data.Entities.TeamStats>()
                 .ForMember(e => e.TeamStatsID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+
+            CreateMap<TeamStatWorldCup, Data.Entities.TeamStatsWorldCup>()
+                .ForMember(e => e.TeamStatsWorldCupID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+
+            CreateMap<Head2Head, Data.Entities.H2H>()
+                .ForMember(e => e.H2HID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
+
+            CreateMap<Head2HeadWorldCup, Data.Entities.H2HWorldCup>()
+                .ForMember(e => e.H2HWorldCupID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
         }
     }
 }

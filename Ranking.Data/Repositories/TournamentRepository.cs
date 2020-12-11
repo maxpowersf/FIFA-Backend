@@ -77,7 +77,7 @@ namespace Ranking.Data.Repositories
 
         public async Task<Tournament> Get(int id)
         {
-            var tournament = await _ctx.Tournaments
+            var tournament = await _ctx.Tournaments.AsNoTracking()
                                         .Include(e => e.TournamentType)
                                         .Include(e => e.Positions)
                                             .ThenInclude(e => e.Team)
