@@ -31,9 +31,15 @@ namespace Ranking.Application.Implementations
             return tournamentList;
         }
 
-        public async Task<List<Tournament>> GetByTournamentType(int TournamentTypeId)
+        public async Task<List<Tournament>> GetByTournamentTypeWithPositions(int tournamentTypeId)
         {
-            List<Tournament> tournamentList = await _tournamentRepository.GetByTournamentType(TournamentTypeId);
+            List<Tournament> tournamentList = await _tournamentRepository.GetByTournamentTypeWithPositions(tournamentTypeId);
+            return tournamentList;
+        }
+
+        public async Task<List<Tournament>> GetByTournamentTypeAndConfederation(int tournamentTypeId, int confederationId)
+        {
+            List<Tournament> tournamentList = await _tournamentRepository.GetByTournamentTypeAndConfederation(tournamentTypeId, confederationId);
             return tournamentList;
         }
 

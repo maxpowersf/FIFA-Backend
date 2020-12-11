@@ -43,27 +43,6 @@ namespace Ranking.Application.Implementations
             this._matchRepository = matchRepository;
         }
 
-        public async Task AddMatchRanking(MatchRanking match)
-        {
-            Domain.Ranking ranking1 = await _rankingRepository.GetActual(match.Team1Id);
-            ranking1.Points += match.Team1Points;
-            _rankingRepository.Update(ranking1);
-
-            Team team1 = await _teamRepository.Get(match.Team1Id);
-            team1.TotalPoints += match.Team1Points;
-            _teamRepository.Update(team1);
-
-            Domain.Ranking ranking2 = await _rankingRepository.GetActual(match.Team2Id);
-            ranking2.Points += match.Team2Points;
-            _rankingRepository.Update(ranking2);
-
-            Team team2 = await _teamRepository.Get(match.Team2Id);
-            team2.TotalPoints += match.Team2Points;
-            _teamRepository.Update(team2);
-
-            await _rankingRepository.SaveChanges();
-        }
-
         public async Task AddMatch(Match match)
         {
             match.MatchResult = GetMatchResult(match);

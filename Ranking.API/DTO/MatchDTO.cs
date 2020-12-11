@@ -16,7 +16,5 @@ namespace Ranking.API.DTO
         public int GoalsTeam2 { get; set; }
         public int PenaltiesTeam1 { get; set; }
         public int PenaltiesTeam2 { get; set; }
-        public decimal Team1Points { get; set; }
-        public decimal Team2Points { get; set; }
     }
 }

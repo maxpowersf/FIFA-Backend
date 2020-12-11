@@ -57,7 +57,7 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Tournament>>(tournamentList);
         }
 
-        public async Task<List<Tournament>> GetByTournamentType(int tournamentTypeId)
+        public async Task<List<Tournament>> GetByTournamentTypeWithPositions(int tournamentTypeId)
         {
             var tournamentList = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
@@ -70,6 +70,30 @@ namespace Ranking.Data.Repositories
             foreach (Tournaments tournament in tournamentList)
             {
                 tournament.Positions = tournament.Positions.OrderBy(e => e.NoPosition).Take(4).ToList();
+            }
+
+            return _mapper.Map<List<Tournament>>(tournamentList);
+        }
+
+        public async Task<List<Tournament>> GetByTournamentTypeAndConfederation(int tournamentTypeId, int confederationId)
+        {
+            var tournamentList = await _ctx.Tournaments
+                                            .Include(e => e.TournamentType)
+                                            .Include(e => e.Confederation)
+                                            .Where(e => e.TournamentTypeID == tournamentTypeId)
+                                            .OrderBy(e => e.Year)
+                                            .ToListAsync();
+
+            if(confederationId > 0)
+            {
+                if (confederationId == 3 || confederationId == 4)
+                {
+                    tournamentList = tournamentList.Where(e => e.ConfederationID == confederationId || e.ConfederationID == null).ToList();
+                }
+                else
+                {
+                    tournamentList = tournamentList.Where(e => e.ConfederationID == confederationId).ToList();
+                }
             }
 
             return _mapper.Map<List<Tournament>>(tournamentList);
