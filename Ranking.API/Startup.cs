@@ -132,6 +132,11 @@ namespace Ranking.API
             services.AddTransient<ITournamentService, TournamentService>();
             services.AddTransient<IPositionService, PositionService>();
             services.AddTransient<IGoalscorerService, GoalscorerService>();
+            services.AddTransient<ITeamStatService, TeamStatService>();
+            services.AddTransient<ITeamStatWorldCupService, TeamStatWorldCupService>();
+            services.AddTransient<IH2HService, H2HService>();
+            services.AddTransient<IH2HWorldCupService, H2HWorldCupService>();
+            services.AddTransient<IMatchService, MatchService>();
         }
     }
 }
