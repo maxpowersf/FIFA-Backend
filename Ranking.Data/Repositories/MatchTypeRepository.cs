@@ -28,7 +28,7 @@ namespace Ranking.Data.Repositories
 
         public async Task<MatchType> Get(int id)
         {
-            var matchType = await _ctx.MatchTypes.FirstOrDefaultAsync(c => c.MatchTypeID == id);
+            var matchType = await _ctx.MatchTypes.AsNoTracking().FirstOrDefaultAsync(c => c.MatchTypeID == id);
             return _mapper.Map<MatchType>(matchType);
         }
 

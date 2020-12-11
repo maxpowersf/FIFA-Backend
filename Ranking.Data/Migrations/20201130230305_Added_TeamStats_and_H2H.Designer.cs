@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20201130230305_Added_TeamStats_and_H2H")]
+    partial class Added_TeamStats_and_H2H
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -136,45 +138,6 @@ namespace Ranking.Data.Migrations
                     b.ToTable("MatchTypes");
                 });
 
-            modelBuilder.Entity("Ranking.Data.Entities.Matches", b =>
-                {
-                    b.Property<int>("MatchID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("GoalsTeam1");
-
-                    b.Property<int>("GoalsTeam2");
-
-                    b.Property<int>("MatchResultID");
-
-                    b.Property<int>("MatchTypeID");
-
-                    b.Property<int>("PenaltiesTeam1");
-
-                    b.Property<int>("PenaltiesTeam2");
-
-                    b.Property<int>("Team1ID");
-
-                    b.Property<int>("Team2ID");
-
-                    b.Property<int>("TournamentID");
-
-                    b.HasKey("MatchID");
-
-                    b.HasIndex("MatchTypeID");
-
-                    b.HasIndex("Team1ID");
-
-                    b.HasIndex("Team2ID");
-
-                    b.HasIndex("TournamentID");
-
-                    b.ToTable("Matches");
-                });
-
             modelBuilder.Entity("Ranking.Data.Entities.Players", b =>
                 {
                     b.Property<int>("PlayerID")
@@ -290,8 +253,6 @@ namespace Ranking.Data.Migrations
 
                     b.Property<int>("Loses");
 
-                    b.Property<int>("Points");
-
                     b.Property<int>("TeamID");
 
                     b.Property<int>("Wins");
@@ -322,8 +283,6 @@ namespace Ranking.Data.Migrations
                     b.Property<int>("GoalsFavor");
 
                     b.Property<int>("Loses");
-
-                    b.Property<int>("Points");
 
                     b.Property<int>("TeamID");
 
@@ -460,29 +419,6 @@ namespace Ranking.Data.Migrations
                         .WithMany()
                         .HasForeignKey("Team2ID")
                         .OnDelete(DeleteBehavior.Restrict);
-                });
-
-            modelBuilder.Entity("Ranking.Data.Entities.Matches", b =>
-                {
-                    b.HasOne("Ranking.Data.Entities.MatchTypes", "MatchType")
-                        .WithMany()
-                        .HasForeignKey("MatchTypeID")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("Ranking.Data.Entities.Teams", "Team1")
-                        .WithMany()
-                        .HasForeignKey("Team1ID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Ranking.Data.Entities.Teams", "Team2")
-                        .WithMany()
-                        .HasForeignKey("Team2ID")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.HasOne("Ranking.Data.Entities.Tournaments", "Tournament")
-                        .WithMany()
-                        .HasForeignKey("TournamentID")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Ranking.Data.Entities.Players", b =>

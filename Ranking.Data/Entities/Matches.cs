@@ -1,27 +1,26 @@
-﻿using Ranking.Domain.Enum;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace Ranking.Domain
+namespace Ranking.Data.Entities
 {
-    public class Match
+    public class Matches
     {
-        public int Id { get; set; }
+        public int MatchID { get; set; }
         public DateTime Date { get; set; }
         public int MatchTypeID { get; set; }
-        public MatchType MatchType { get; set; }
+        public MatchTypes MatchType { get; set; }
         public int TournamentID { get; set; }
-        public Tournament Tournament { get; set; }
+        public Tournaments Tournament { get; set; }
         public int Team1ID { get; set; }
-        public Team Team1 { get; set; }
+        public Teams Team1 { get; set; }
         public int Team2ID { get; set; }
-        public Team Team2 { get; set; }
+        public Teams Team2 { get; set; }
         public int GoalsTeam1 { get; set; }
         public int PenaltiesTeam1 { get; set; }
         public int GoalsTeam2 { get; set; }
         public int PenaltiesTeam2 { get; set; }
-        public MatchResult MatchResult { get; set; }
-        public string Result { get { return MatchResult.ToString(); } }
+        public int MatchResultID { get; set; }
     }
 }

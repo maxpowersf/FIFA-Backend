@@ -37,9 +37,15 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet("{tournamentTypeId}")]
-        public async Task<IActionResult> GetByTournamentType(int tournamentTypeId)
+        public async Task<IActionResult> GetByTournamentTypeWithPositions(int tournamentTypeId)
         {
-            return new OkObjectResult(await _tournamentService.GetByTournamentType(tournamentTypeId));
+            return new OkObjectResult(await _tournamentService.GetByTournamentTypeWithPositions(tournamentTypeId));
+        }
+
+        [HttpGet("{tournamentTypeId}/{confederationId:int?}")]
+        public async Task<IActionResult> GetByTournamentTypeAndConfederation(int tournamentTypeId, int confederationId)
+        {
+            return new OkObjectResult(await _tournamentService.GetByTournamentTypeAndConfederation(tournamentTypeId, confederationId));
         }
 
         [HttpGet("{id}")]

@@ -52,7 +52,9 @@ namespace Ranking.API
             services.AddAuthorization();
             services.AddDbContext<RankingContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"))
+                        .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
+                        .EnableSensitiveDataLogging(true);
             });
 
             services.AddAutoMapper(typeof(Startup));
@@ -112,6 +114,11 @@ namespace Ranking.API
             services.AddTransient<ITournamentRepository, TournamentRepository>();
             services.AddTransient<IPositionRepository, PositionRepository>();
             services.AddTransient<IGoalscorerRepository, GoalscorerRepository>();
+            services.AddTransient<ITeamStatRepository, TeamStatRepository>();
+            services.AddTransient<ITeamStatWorldCupRepository, TeamStatWorldCupRepository>();
+            services.AddTransient<IH2HRepository, H2HRepository>();
+            services.AddTransient<IH2HWorldCupRepository, H2HWorldCupRepository>();
+            services.AddTransient<IMatchRepository, MatchRepository>();
         }
 
         private void ConfigureApplicationServices(IServiceCollection services)
@@ -125,6 +132,11 @@ namespace Ranking.API
             services.AddTransient<ITournamentService, TournamentService>();
             services.AddTransient<IPositionService, PositionService>();
             services.AddTransient<IGoalscorerService, GoalscorerService>();
+            services.AddTransient<ITeamStatService, TeamStatService>();
+            services.AddTransient<ITeamStatWorldCupService, TeamStatWorldCupService>();
+            services.AddTransient<IH2HService, H2HService>();
+            services.AddTransient<IH2HWorldCupService, H2HWorldCupService>();
+            services.AddTransient<IMatchService, MatchService>();
         }
     }
 }

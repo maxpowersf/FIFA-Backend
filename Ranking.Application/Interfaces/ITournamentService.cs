@@ -10,7 +10,8 @@ namespace Ranking.Application.Interfaces
     {
         Task<List<Tournament>> Get();
         Task<List<Tournament>> GetByTeam(int teamId);
-        Task<List<Tournament>> GetByTournamentType(int tournamentTypeId);
+        Task<List<Tournament>> GetByTournamentTypeWithPositions(int tournamentTypeId);
+        Task<List<Tournament>> GetByTournamentTypeAndConfederation(int tournamentTypeId, int confederationId);
         Task<Tournament> Get(int id);
         Task Add(Tournament tournament);
         Task Update(Tournament tournament);

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20201207201446_Added_Matches_table")]
+    partial class Added_Matches_table
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -141,8 +143,6 @@ namespace Ranking.Data.Migrations
                     b.Property<int>("MatchID")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date");
 
                     b.Property<int>("GoalsTeam1");
 
@@ -290,8 +290,6 @@ namespace Ranking.Data.Migrations
 
                     b.Property<int>("Loses");
 
-                    b.Property<int>("Points");
-
                     b.Property<int>("TeamID");
 
                     b.Property<int>("Wins");
@@ -322,8 +320,6 @@ namespace Ranking.Data.Migrations
                     b.Property<int>("GoalsFavor");
 
                     b.Property<int>("Loses");
-
-                    b.Property<int>("Points");
 
                     b.Property<int>("TeamID");
 
