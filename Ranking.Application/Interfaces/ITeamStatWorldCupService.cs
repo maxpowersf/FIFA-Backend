@@ -12,6 +12,6 @@ namespace Ranking.Application.Interfaces
         Task<List<TeamStatWorldCup>> GetByTeam(int teamId);
         Task<TeamStatWorldCup> Get(int id);
         Task Add(TeamStatWorldCup teamStat);
-        void Update(TeamStatWorldCup teamStat);
+        Task Update(TeamStatWorldCup teamStat);
     }
 }

@@ -38,7 +38,7 @@ namespace Ranking.Application.Implementations
             return _teamStatRepository.GetByTeam(teamId);
         }
 
-        public async void Update(TeamStat teamStat)
+        public async Task Update(TeamStat teamStat)
         {
             _teamStatRepository.Update(teamStat);
             await _teamStatRepository.SaveChanges();

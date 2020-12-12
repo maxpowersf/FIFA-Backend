@@ -13,7 +13,7 @@ namespace Ranking.Application.Interfaces
         Task<Head2Head> GetByTeams(int team1Id, int team2Id);
         Task<Head2Head> Get(int id);
         Task Add(Head2Head h2h);
-        void Update(Head2Head h2h);
+        Task Update(Head2Head h2h);
         Task Delete(int id);
     }
 }

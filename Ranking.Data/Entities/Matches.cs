@@ -9,8 +9,6 @@ namespace Ranking.Data.Entities
     {
         public int MatchID { get; set; }
         public DateTime Date { get; set; }
-        public int MatchTypeID { get; set; }
-        public MatchTypes MatchType { get; set; }
         public int TournamentID { get; set; }
         public Tournaments Tournament { get; set; }
         public int Team1ID { get; set; }

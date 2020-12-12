@@ -44,9 +44,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] TournamentTypeDTO tournamentTypeDTO)
+        public async Task<IActionResult> Update([FromBody] TournamentTypeDTO tournamentTypeDTO)
         {
-            _tournamentTypeService.Update(_mapper.Map<TournamentType>(tournamentTypeDTO));
+            await _tournamentTypeService.Update(_mapper.Map<TournamentType>(tournamentTypeDTO));
             return new OkObjectResult(true);
         }
 

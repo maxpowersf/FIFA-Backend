@@ -102,7 +102,7 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Team>>(teamList);
         }
 
-        public async Task<List<Team>> GetConfederationTournamentTitles(int confederationID)
+        public async Task<List<Team>> GetConfederationTournamentTitles(int? confederationID)
         {
             var teamList = await _ctx.Teams
                                     .Include(e => e.Confederation)

@@ -12,7 +12,7 @@ namespace Ranking.Application.Repositories
         Task<List<Player>> GetByTeam(int teamId);
         Task<List<Player>> GetWorldCupGoals();
         Task<List<Player>> GetConfederationsCupGoals();
-        Task<List<Player>> GetConfederationTournamentGoals(int confederationID);
+        Task<List<Player>> GetConfederationTournamentGoals(int? confederationID);
         Task<List<Player>> GetQualificationGoals();
         Task<Player> Get(int id);
         Task<Player> Get(string name, string teamName);

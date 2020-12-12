@@ -14,7 +14,6 @@ namespace Ranking.Application.Implementations
     {
         private readonly IRankingRepository _rankingRepository;
         private readonly ITeamRepository _teamRepository;
-        private readonly IMatchTypeRepository _matchTypeRepository;
         private readonly ITournamentRepository _tournamentRepository;
         private readonly ITeamStatRepository _teamStatRepository;
         private readonly ITeamStatWorldCupRepository _teamStatWorldCupRepository;
@@ -24,7 +23,6 @@ namespace Ranking.Application.Implementations
 
         public RankingService(IRankingRepository rankingRepository, 
             ITeamRepository teamRepository, 
-            IMatchTypeRepository matchTypeRepository,
             ITournamentRepository tournamentRepository,
             ITeamStatRepository teamStatRepository,
             ITeamStatWorldCupRepository teamStatWorldCupRepository,
@@ -34,7 +32,6 @@ namespace Ranking.Application.Implementations
         {
             this._rankingRepository = rankingRepository;
             this._teamRepository = teamRepository;
-            this._matchTypeRepository = matchTypeRepository;
             this._tournamentRepository = tournamentRepository;
             this._teamStatRepository = teamStatRepository;
             this._teamStatWorldCupRepository = teamStatWorldCupRepository;
@@ -48,7 +45,6 @@ namespace Ranking.Application.Implementations
             match.MatchResult = GetMatchResult(match);
 
             Tournament tournament = await _tournamentRepository.Get(match.TournamentID);
-            MatchType matchType = await _matchTypeRepository.Get(match.MatchTypeID);
             Team team1 = await _teamRepository.Get(match.Team1ID);
             Team team2 = await _teamRepository.Get(match.Team2ID);
 
@@ -96,8 +92,8 @@ namespace Ranking.Application.Implementations
 
             #region Update Rankings
             var regionalWeight = GetRegionalWeight(team1.Confederation.Weight, team2.Confederation.Weight);
-            var team1Points = GetTeamPoints(GetTeamResult(match, 1), regionalWeight, CalculateOposition(team2.ActualRank), matchType.Weight);
-            var team2Points = GetTeamPoints(GetTeamResult(match, 2), regionalWeight, CalculateOposition(team1.ActualRank), matchType.Weight);
+            var team1Points = GetTeamPoints(GetTeamResult(match, 1), regionalWeight, CalculateOposition(team2.ActualRank), tournament.TournamentType.MatchType.Weight);
+            var team2Points = GetTeamPoints(GetTeamResult(match, 2), regionalWeight, CalculateOposition(team1.ActualRank), tournament.TournamentType.MatchType.Weight);
 
             Domain.Ranking ranking1 = await _rankingRepository.GetActual(match.Team1ID);
             ranking1.Points += team1Points;

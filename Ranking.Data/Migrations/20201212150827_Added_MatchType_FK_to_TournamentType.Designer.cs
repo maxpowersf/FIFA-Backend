@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20201212150827_Added_MatchType_FK_to_TournamentType")]
+    partial class Added_MatchType_FK_to_TournamentType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -150,6 +152,8 @@ namespace Ranking.Data.Migrations
 
                     b.Property<int>("MatchResultID");
 
+                    b.Property<int>("MatchTypeID");
+
                     b.Property<int>("PenaltiesTeam1");
 
                     b.Property<int>("PenaltiesTeam2");
@@ -161,6 +165,8 @@ namespace Ranking.Data.Migrations
                     b.Property<int>("TournamentID");
 
                     b.HasKey("MatchID");
+
+                    b.HasIndex("MatchTypeID");
 
                     b.HasIndex("Team1ID");
 
@@ -464,6 +470,11 @@ namespace Ranking.Data.Migrations
 
             modelBuilder.Entity("Ranking.Data.Entities.Matches", b =>
                 {
+                    b.HasOne("Ranking.Data.Entities.MatchTypes", "MatchType")
+                        .WithMany()
+                        .HasForeignKey("MatchTypeID")
+                        .OnDelete(DeleteBehavior.Cascade);
+
                     b.HasOne("Ranking.Data.Entities.Teams", "Team1")
                         .WithMany()
                         .HasForeignKey("Team1ID")

@@ -15,7 +15,7 @@ namespace Ranking.Application.Repositories
         Task<List<Team>> GetTeamsWithTitles(int quantity);
         Task<List<Team>> GetWorldCupTitles();
         Task<List<Team>> GetConfederationsCupTitles();
-        Task<List<Team>> GetConfederationTournamentTitles(int confederationID);
+        Task<List<Team>> GetConfederationTournamentTitles(int? confederationID);
         Task<List<Team>> GetWorldCupQualifications();
         Task<Team> Get(int id);
         Task Add(Team team);

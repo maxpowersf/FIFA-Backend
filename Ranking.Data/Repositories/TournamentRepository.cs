@@ -103,6 +103,7 @@ namespace Ranking.Data.Repositories
         {
             var tournament = await _ctx.Tournaments.AsNoTracking()
                                         .Include(e => e.TournamentType)
+                                            .ThenInclude(e => e.MatchType)
                                         .Include(e => e.Positions)
                                             .ThenInclude(e => e.Team)
                                             .ThenInclude(e => e.Confederation)
