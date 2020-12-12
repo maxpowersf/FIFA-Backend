@@ -38,7 +38,7 @@ namespace Ranking.Application.Implementations
             return _matchRepository.GetByTeam(teamId);
         }
 
-        public async void Update(Match match)
+        public async Task Update(Match match)
         {
             _matchRepository.Update(match);
             await _matchRepository.SaveChanges();

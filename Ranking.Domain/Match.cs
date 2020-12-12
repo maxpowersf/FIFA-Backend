@@ -9,8 +9,6 @@ namespace Ranking.Domain
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
-        public int MatchTypeID { get; set; }
-        public MatchType MatchType { get; set; }
         public int TournamentID { get; set; }
         public Tournament Tournament { get; set; }
         public int Team1ID { get; set; }

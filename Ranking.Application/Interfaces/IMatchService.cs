@@ -12,6 +12,6 @@ namespace Ranking.Application.Interfaces
         Task<List<Match>> GetByTeam(int teamId);
         Task<Match> Get(int id);
         Task Add(Match match);
-        void Update(Match match);
+        Task Update(Match match);
     }
 }

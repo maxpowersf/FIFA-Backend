@@ -12,6 +12,6 @@ namespace Ranking.Application.Interfaces
         Task<List<TeamStat>> GetByTeam(int teamId);
         Task<TeamStat> Get(int id);
         Task Add(TeamStat teamStat);
-        void Update(TeamStat teamStat);
+        Task Update(TeamStat teamStat);
     }
 }

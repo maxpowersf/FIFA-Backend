@@ -49,7 +49,7 @@ namespace Ranking.Application.Implementations
             return _h2HRepository.GetByTeams(team1Id, team2Id);
         }
 
-        public async void Update(Head2Head h2h)
+        public async Task Update(Head2Head h2h)
         {
             _h2HRepository.Update(h2h);
             await _h2HRepository.SaveChanges();

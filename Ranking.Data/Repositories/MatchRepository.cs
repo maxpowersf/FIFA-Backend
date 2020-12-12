@@ -28,7 +28,6 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Team1)
                                         .Include(e => e.Team2)
                                         .Include(e => e.Tournament)
-                                        .Include(e => e.MatchType)
                                         .ToListAsync();
             return _mapper.Map<List<Match>>(matchesList);
         }
@@ -39,7 +38,6 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Team1)
                                         .Include(e => e.Team2)
                                         .Include(e => e.Tournament)
-                                        .Include(e => e.MatchType)
                                         .Where(e => e.Team1ID == teamId || e.Team2ID == teamId)
                                         .OrderByDescending(e => e.Date)
                                             .ThenBy(e => e.MatchID)
@@ -53,7 +51,6 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Team1)
                                         .Include(e => e.Team2)
                                         .Include(e => e.Tournament)
-                                        .Include(e => e.MatchType)
                                         .FirstOrDefaultAsync(e => e.MatchID == id);
             return _mapper.Map<Match>(match);
         }

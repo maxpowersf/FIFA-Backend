@@ -48,9 +48,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] GoalscorerDTO goalscorerDTO)
+        public async Task<IActionResult> Update([FromBody] GoalscorerDTO goalscorerDTO)
         {
-            _goalscorerService.Update(_mapper.Map<Goalscorer>(goalscorerDTO));
+            await _goalscorerService.Update(_mapper.Map<Goalscorer>(goalscorerDTO));
             return new OkObjectResult(true);
         }
 

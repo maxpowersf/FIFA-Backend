@@ -25,10 +25,6 @@ namespace Ranking.Data
             {
                 entity.HasKey(e => e.MatchID);
 
-                entity.HasOne(e => e.MatchType)
-                    .WithMany()
-                    .HasForeignKey(e => e.MatchTypeID);
-
                 entity.HasOne(e => e.Tournament)
                     .WithMany()
                     .HasForeignKey(e => e.TournamentID);
@@ -79,6 +75,11 @@ namespace Ranking.Data
             builder.Entity<Entities.TournamentTypes>(entity =>
             {
                 entity.HasKey(e => e.TournamentTypeID);
+
+                entity.HasOne(e => e.MatchType)
+                    .WithMany()
+                    .HasForeignKey(e => e.MatchTypeID)
+                    .OnDelete(DeleteBehavior.Restrict);
 
                 entity.HasOne(e => e.Confederation)
                     .WithMany()

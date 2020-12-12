@@ -49,7 +49,7 @@ namespace Ranking.Application.Implementations
             return _h2HWorldCupRepository.GetByTeams(team1Id, team2Id);
         }
 
-        public async void Update(Head2HeadWorldCup h2hWorldCup)
+        public async Task Update(Head2HeadWorldCup h2hWorldCup)
         {
             _h2HWorldCupRepository.Update(h2hWorldCup);
             await _h2HWorldCupRepository.SaveChanges();

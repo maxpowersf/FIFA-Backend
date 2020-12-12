@@ -44,9 +44,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPut]
-        public IActionResult Update([FromBody] ConfederationDTO confederationDTO)
+        public async Task<IActionResult> Update([FromBody] ConfederationDTO confederationDTO)
         {
-            _confederationService.Update(_mapper.Map<Confederation>(confederationDTO));
+            await _confederationService.Update(_mapper.Map<Confederation>(confederationDTO));
             return new OkObjectResult(true);
         }
 

@@ -8,6 +8,8 @@ namespace Ranking.Data.Entities
     {
         public int TournamentTypeID { get; set; }
         public string Name { get; set; }
+        public int? MatchTypeID { get; set; }
+        public MatchTypes MatchType { get; set; }
         public int FormatID { get; set; }
         public int? ConfederationID { get; set; }
         public Confederations Confederation { get; set; }
