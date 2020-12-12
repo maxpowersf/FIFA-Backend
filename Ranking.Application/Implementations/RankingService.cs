@@ -14,7 +14,6 @@ namespace Ranking.Application.Implementations
     {
         private readonly IRankingRepository _rankingRepository;
         private readonly ITeamRepository _teamRepository;
-        private readonly IMatchTypeRepository _matchTypeRepository;
         private readonly ITournamentRepository _tournamentRepository;
         private readonly ITeamStatRepository _teamStatRepository;
         private readonly ITeamStatWorldCupRepository _teamStatWorldCupRepository;
@@ -24,7 +23,6 @@ namespace Ranking.Application.Implementations
 
         public RankingService(IRankingRepository rankingRepository, 
             ITeamRepository teamRepository, 
-            IMatchTypeRepository matchTypeRepository,
             ITournamentRepository tournamentRepository,
             ITeamStatRepository teamStatRepository,
             ITeamStatWorldCupRepository teamStatWorldCupRepository,
@@ -34,7 +32,6 @@ namespace Ranking.Application.Implementations
         {
             this._rankingRepository = rankingRepository;
             this._teamRepository = teamRepository;
-            this._matchTypeRepository = matchTypeRepository;
             this._tournamentRepository = tournamentRepository;
             this._teamStatRepository = teamStatRepository;
             this._teamStatWorldCupRepository = teamStatWorldCupRepository;
