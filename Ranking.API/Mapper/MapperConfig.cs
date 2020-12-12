@@ -36,11 +36,15 @@ namespace Ranking.API.Mapper
             CreateMap<Domain.Ranking, Data.Entities.Rankings>()
                 .ForMember(e => e.RankingID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
 
-            CreateMap<MatchDTO, Match>();
+            CreateMap<MatchDTO, Match>()
+                .ForMember(e => e.MatchRound, opt => opt.MapFrom(e => (MatchRound)e.MatchRoundId));
             CreateMap<Match, Data.Entities.Matches>()
                 .ForMember(e => e.MatchID, opt => opt.MapFrom(e => e.Id))
                 .ForMember(e => e.MatchResultID, opt => opt.MapFrom(e => (int)e.MatchResult))
-                    .ReverseMap().ForMember(e => e.MatchResult, opt => opt.MapFrom(e => (MatchResult)e.MatchResultID));
+                .ForMember(e => e.MatchRoundID, opt => opt.MapFrom(e => (int)e.MatchRound))
+                    .ReverseMap()
+                    .ForMember(e => e.MatchResult, opt => opt.MapFrom(e => (MatchResult)e.MatchResultID))
+                    .ForMember(e => e.MatchRound, opt => opt.MapFrom(e => (MatchRound)e.MatchRoundID));
 
             CreateMap<TournamentTypeDTO, TournamentType>()
                 .ForMember(e => e.Format, opt => opt.MapFrom(e => (TournamentFormat)e.Format));

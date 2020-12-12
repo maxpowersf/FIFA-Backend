@@ -33,6 +33,11 @@ namespace Ranking.Application.Implementations
             return _matchRepository.Get(id);
         }
 
+        public async Task<List<Match>> GetByTournament(int id)
+        {
+            return await _matchRepository.GetByTournament(id);
+        }
+
         public Task<List<Match>> GetByTeam(int teamId)
         {
             return _matchRepository.GetByTeam(teamId);

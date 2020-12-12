@@ -9,6 +9,9 @@ namespace Ranking.API.DTO
     {
         public DateTime Date { get; set; }
         public int TournamentId { get; set; }
+        public int MatchRoundId { get; set; }
+        public string Group { get; set; }
+        public int? Matchday { get; set; }
         public int Team1Id { get; set; }
         public int Team2Id { get; set; }
         public int GoalsTeam1 { get; set; }
