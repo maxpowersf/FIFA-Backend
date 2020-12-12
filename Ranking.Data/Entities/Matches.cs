@@ -11,6 +11,9 @@ namespace Ranking.Data.Entities
         public DateTime Date { get; set; }
         public int TournamentID { get; set; }
         public Tournaments Tournament { get; set; }
+        public int MatchRoundID { get; set; }
+        public string Group { get; set; }
+        public int? Matchday { get; set; }
         public int Team1ID { get; set; }
         public Teams Team1 { get; set; }
         public int Team2ID { get; set; }

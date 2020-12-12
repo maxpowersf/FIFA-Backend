@@ -32,6 +32,20 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Match>>(matchesList);
         }
 
+        public async Task<List<Match>> GetByTournament(int tournamentId)
+        {
+            var matchesList = await _ctx.Matches
+                                        .Include(e => e.Team1)
+                                        .Include(e => e.Team2)
+                                        .Where(e => e.TournamentID == tournamentId)
+                                        .OrderBy(e => e.Date)
+                                            .ThenBy(e => e.MatchRoundID)
+                                            .ThenBy(e => e.Matchday)
+                                            .ThenBy(e => e.Group)
+                                        .ToListAsync();
+            return _mapper.Map<List<Match>>(matchesList);
+        }
+
         public async Task<List<Match>> GetByTeam(int teamId)
         {
             var matchesList = await _ctx.Matches

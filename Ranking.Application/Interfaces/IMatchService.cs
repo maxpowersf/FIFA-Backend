@@ -9,6 +9,7 @@ namespace Ranking.Application.Interfaces
     public interface IMatchService
     {
         Task<List<Match>> Get();
+        Task<List<Match>> GetByTournament(int id);
         Task<List<Match>> GetByTeam(int teamId);
         Task<Match> Get(int id);
         Task Add(Match match);

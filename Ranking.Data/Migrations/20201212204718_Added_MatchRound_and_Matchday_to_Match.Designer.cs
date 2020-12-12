@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ranking.Data;
 
 namespace Ranking.Data.Migrations
 {
     [DbContext(typeof(RankingContext))]
-    partial class RankingContextModelSnapshot : ModelSnapshot
+    [Migration("20201212204718_Added_MatchRound_and_Matchday_to_Match")]
+    partial class Added_MatchRound_and_Matchday_to_Match
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -147,8 +149,6 @@ namespace Ranking.Data.Migrations
                     b.Property<int>("GoalsTeam1");
 
                     b.Property<int>("GoalsTeam2");
-
-                    b.Property<string>("Group");
 
                     b.Property<int>("MatchResultID");
 
