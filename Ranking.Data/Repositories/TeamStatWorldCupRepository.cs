@@ -26,7 +26,10 @@ namespace Ranking.Data.Repositories
         {
             var teamStatsWorldCupList = await _ctx.TeamStatsWorldCup
                                         .Include(e => e.Team)
-                                        .OrderBy(e => e.Points)
+                                            .ThenInclude(e => e.Confederation)
+                                        .OrderByDescending(e => e.Points)
+                                            .ThenByDescending(e => e.GoalDifference)
+                                            .ThenByDescending(e => e.GoalsFavor)
                                         .ToListAsync();
             return _mapper.Map<List<TeamStatWorldCup>>(teamStatsWorldCupList);
         }
