@@ -26,7 +26,10 @@ namespace Ranking.Data.Repositories
         {
             var teamStatsList = await _ctx.TeamStats
                                         .Include(e => e.Team)
-                                        .OrderBy(e => e.Points)
+                                            .ThenInclude(e => e.Confederation)
+                                        .OrderByDescending(e => e.Points)
+                                            .ThenByDescending(e => e.GoalDifference)
+                                            .ThenByDescending(e => e.GoalsFavor)
                                         .ToListAsync();
             return _mapper.Map<List<TeamStat>>(teamStatsList);
         }
