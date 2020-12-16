@@ -59,6 +59,19 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Match>>(matchesList);
         }
 
+        public async Task<List<Match>> GetByTeams(int team1Id, int team2Id)
+        {
+            var matchesList = await _ctx.Matches
+                                        .Include(e => e.Team1)
+                                        .Include(e => e.Team2)
+                                        .Include(e => e.Tournament)
+                                        .Where(e => (e.Team1ID == team1Id || e.Team2ID == team1Id) && (e.Team1ID == team2Id || e.Team2ID == team2Id))
+                                        .OrderByDescending(e => e.Date)
+                                            .ThenBy(e => e.MatchID)
+                                        .ToListAsync();
+            return _mapper.Map<List<Match>>(matchesList);
+        }
+
         public async Task<Match> Get(int id)
         {
             var match = await _ctx.Matches.AsNoTracking()
