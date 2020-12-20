@@ -30,6 +30,12 @@ namespace Ranking.API.Controllers
             return new OkObjectResult(await _h2HService.Get());
         }
 
+        [HttpGet("{teamId}")]
+        public async Task<IActionResult> GetByTeam(int teamId)
+        {
+            return new OkObjectResult(await _h2HService.GetByTeam(teamId));
+        }
+
         [HttpGet("{team1Id}/{team2Id}")]
         public async Task<IActionResult> GetByTeams(int team1Id, int team2Id)
         {
