@@ -43,6 +43,11 @@ namespace Ranking.Application.Implementations
             return _matchRepository.GetByTeam(teamId);
         }
 
+        public Task<List<Match>> GetByTeams(int team1Id, int team2Id)
+        {
+            return _matchRepository.GetByTeams(team1Id, team2Id);
+        }
+
         public async Task Update(Match match)
         {
             _matchRepository.Update(match);

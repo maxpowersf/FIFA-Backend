@@ -11,6 +11,7 @@ namespace Ranking.Application.Repositories
         Task<List<Match>> Get();
         Task<List<Match>> GetByTournament(int id);
         Task<List<Match>> GetByTeam(int teamId);
+        Task<List<Match>> GetByTeams(int team1Id, int team2Id);
         Task<Match> Get(int id);
         Task Add(Match match);
         void Update(Match match);

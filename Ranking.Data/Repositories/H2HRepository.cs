@@ -36,10 +36,21 @@ namespace Ranking.Data.Repositories
             var h2hList = await _ctx.H2H
                                     .Include(e => e.Team1)
                                     .Include(e => e.Team2)
-                                    .Where(e => e.Team1ID == teamId || e.Team2ID == teamId)
+                                        .ThenInclude(e => e.Confederation)
+                                    .Where(e => e.Team1ID == teamId)
                                     .OrderBy(e => e.Team2.Name)
                                     .ToListAsync();
             return _mapper.Map<List<Head2Head>>(h2hList);
+        }
+
+        public async Task<Head2Head> GetByTeams(int team1Id, int team2Id)
+        {
+            var h2h = await _ctx.H2H.AsNoTracking()
+                                    .Include(e => e.Team1)
+                                    .Include(e => e.Team2)
+                                        .ThenInclude(e => e.Confederation)
+                                    .FirstOrDefaultAsync(e => e.Team1ID == team1Id && e.Team2ID == team2Id);
+            return _mapper.Map<Head2Head>(h2h);
         }
 
         public async Task<Head2Head> Get(int id)
@@ -48,15 +59,6 @@ namespace Ranking.Data.Repositories
                                     .Include(e => e.Team1)
                                     .Include(e => e.Team2)
                                     .FirstOrDefaultAsync(e => e.H2HID == id);
-            return _mapper.Map<Head2Head>(h2h);
-        }
-
-        public async Task<Head2Head> GetByTeams(int team1Id, int team2Id)
-        {
-            var h2h = await _ctx.H2H.AsNoTracking()
-                                    .Include(e => e.Team1)
-                                    .Include(e => e.Team2)
-                                    .FirstOrDefaultAsync(e => e.Team1ID == team1Id && e.Team2ID == team2Id);
             return _mapper.Map<Head2Head>(h2h);
         }
 

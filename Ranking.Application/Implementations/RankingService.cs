@@ -222,14 +222,14 @@ namespace Ranking.Application.Implementations
             team1Stat.GoalsFavor += match.GoalsTeam1;
             team1Stat.GoalsAgainst += match.GoalsTeam2;
             team1Stat.GoalDifference = team1Stat.GoalsFavor - team1Stat.GoalsAgainst;
-            team1Stat.Effectiveness = Math.Round((((decimal)team1Stat.Wins * 3) + (decimal)team1Stat.Draws) / ((decimal)team1Stat.GamesPlayed * 3) * 100, 2);
+            team1Stat.Effectiveness = Math.Round(((decimal)team1Stat.Points / ((decimal)team1Stat.GamesPlayed * 3)) * 100, 2);
 
             team2Stat.Points = team2Stat.Wins * 3 + team2Stat.Draws;
             team2Stat.GamesPlayed++;
             team2Stat.GoalsFavor += match.GoalsTeam2;
             team2Stat.GoalsAgainst += match.GoalsTeam1;
             team2Stat.GoalDifference = team2Stat.GoalsFavor - team2Stat.GoalsAgainst;
-            team2Stat.Effectiveness = Math.Round((((decimal)team2Stat.Wins * 3) + (decimal)team2Stat.Draws) / ((decimal)team2Stat.GamesPlayed * 3) * 100, 2);
+            team2Stat.Effectiveness = Math.Round(((decimal)team2Stat.Points / ((decimal)team2Stat.GamesPlayed * 3)) * 100, 2);
         }
 
         private void CompleteTeamsStatWorldCup(Match match, ref TeamStatWorldCup team1Stat, ref TeamStatWorldCup team2Stat)
@@ -255,14 +255,14 @@ namespace Ranking.Application.Implementations
             team1Stat.GoalsFavor += match.GoalsTeam1;
             team1Stat.GoalsAgainst += match.GoalsTeam2;
             team1Stat.GoalDifference = team1Stat.GoalsFavor - team1Stat.GoalsAgainst;
-            team1Stat.Effectiveness = Math.Round((((decimal)team1Stat.Wins * 3) + (decimal)team1Stat.Draws) / ((decimal)team1Stat.GamesPlayed * 3) * 100, 2);
+            team1Stat.Effectiveness = Math.Round(((decimal)team1Stat.Points / ((decimal)team1Stat.GamesPlayed * 3)) * 100, 2);
 
             team2Stat.Points = team2Stat.Wins * 3 + team2Stat.Draws;
             team2Stat.GamesPlayed++;
             team2Stat.GoalsFavor += match.GoalsTeam2;
             team2Stat.GoalsAgainst += match.GoalsTeam1;
             team2Stat.GoalDifference = team2Stat.GoalsFavor - team2Stat.GoalsAgainst;
-            team2Stat.Effectiveness = Math.Round((((decimal)team2Stat.Wins * 3) + (decimal)team2Stat.Draws) / ((decimal)team2Stat.GamesPlayed * 3) * 100, 2);
+            team2Stat.Effectiveness = Math.Round(((decimal)team2Stat.Points / ((decimal)team2Stat.GamesPlayed * 3)) * 100, 2);
         }
 
         private void CompleteH2H(Match match, ref Head2Head h2hTeam1, ref Head2Head h2hTeam2)
