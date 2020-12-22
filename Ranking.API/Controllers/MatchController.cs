@@ -43,9 +43,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet("{team1Id}/{team2Id}")]
-        public async Task<IActionResult> GetByTeams(int team1Id, int team2Id)
+        public async Task<IActionResult> GetByTeams(int team1Id, int team2Id, bool worldcup)
         {
-            return new OkObjectResult(await _matchService.GetByTeams(team1Id, team2Id));
+            return new OkObjectResult(await _matchService.GetByTeams(team1Id, team2Id, worldcup));
         }
 
         [HttpGet("{id}")]
