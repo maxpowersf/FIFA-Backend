@@ -11,7 +11,7 @@ namespace Ranking.Application.Interfaces
         Task<List<Match>> Get();
         Task<List<Match>> GetByTournament(int id);
         Task<List<Match>> GetByTeam(int teamId);
-        Task<List<Match>> GetByTeams(int team1Id, int team2Id);
+        Task<List<Match>> GetByTeams(int team1Id, int team2Id, bool worldcup);
         Task<Match> Get(int id);
         Task Add(Match match);
         Task Update(Match match);

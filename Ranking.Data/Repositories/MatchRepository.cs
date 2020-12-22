@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Ranking.Application.Repositories;
 using Ranking.Data.Entities;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -59,13 +60,14 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Match>>(matchesList);
         }
 
-        public async Task<List<Match>> GetByTeams(int team1Id, int team2Id)
+        public async Task<List<Match>> GetByTeams(int team1Id, int team2Id, bool worldcup)
         {
             var matchesList = await _ctx.Matches
                                         .Include(e => e.Team1)
                                         .Include(e => e.Team2)
                                         .Include(e => e.Tournament)
-                                        .Where(e => (e.Team1ID == team1Id || e.Team2ID == team1Id) && (e.Team1ID == team2Id || e.Team2ID == team2Id))
+                                        .Where(e => (e.Team1ID == team1Id || e.Team2ID == team1Id) && (e.Team1ID == team2Id || e.Team2ID == team2Id) &&
+                                                        (!worldcup || e.Tournament.TournamentType.FormatID == (int)TournamentFormat.WorldCup))
                                         .OrderByDescending(e => e.Date)
                                             .ThenBy(e => e.MatchID)
                                         .ToListAsync();
