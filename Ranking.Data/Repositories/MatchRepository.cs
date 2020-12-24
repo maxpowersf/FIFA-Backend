@@ -44,9 +44,14 @@ namespace Ranking.Data.Repositories
                         where (request.TournamentTypeID.HasValue) ? match.Tournament.TournamentTypeID == request.TournamentTypeID : true
                         where (request.StartDate.HasValue) ? match.Date >= request.StartDate : true
                         where (request.EndDate.HasValue) ? match.Date <= request.EndDate : true
+                        orderby match.Date ascending
                         select match;
 
-            var matchesList = await query.ToListAsync();
+            var matchesList = await query.Include(e => e.Team1)
+                                            .Include(e => e.Team2)
+                                            .Include(e => e.Tournament)
+                                            .Take(request.Quantity.GetValueOrDefault(int.MaxValue))
+                                            .ToListAsync();
 
             return _mapper.Map<List<Match>>(matchesList);
         }
