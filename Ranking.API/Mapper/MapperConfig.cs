@@ -36,6 +36,8 @@ namespace Ranking.API.Mapper
             CreateMap<Domain.Ranking, Data.Entities.Rankings>()
                 .ForMember(e => e.RankingID, opt => opt.MapFrom(e => e.Id)).ReverseMap();
 
+            CreateMap<MatchCollectionRequestDTO, Domain.Request.MatchCollectionRequest>();
+
             CreateMap<MatchDTO, Match>()
                 .ForMember(e => e.MatchRound, opt => opt.MapFrom(e => (MatchRound)e.MatchRoundId));
             CreateMap<Match, Data.Entities.Matches>()

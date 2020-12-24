@@ -1,4 +1,5 @@
 ﻿using Ranking.Domain;
+using Ranking.Domain.Request;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -9,6 +10,7 @@ namespace Ranking.Application.Repositories
     public interface IMatchRepository
     {
         Task<List<Match>> Get();
+        Task<List<Match>> Get(MatchCollectionRequest request);
         Task<List<Match>> GetByTournament(int id);
         Task<List<Match>> GetByTeam(int teamId);
         Task<List<Match>> GetByTeams(int team1Id, int team2Id, bool worldcup);
