@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ranking.API.DTO;
 using Ranking.Application.Interfaces;
 using Ranking.Domain;
+using Ranking.Domain.Request;
 
 namespace Ranking.API.Controllers
 {
@@ -28,6 +29,12 @@ namespace Ranking.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             return new OkObjectResult(await _matchService.Get());
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> GetFiltered(MatchCollectionRequestDTO request)
+        {
+            return new OkObjectResult(await _matchService.Get(_mapper.Map<MatchCollectionRequest>(request)));
         }
 
         [HttpGet("{id}")]

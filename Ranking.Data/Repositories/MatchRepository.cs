@@ -4,6 +4,7 @@ using Ranking.Application.Repositories;
 using Ranking.Data.Entities;
 using Ranking.Domain;
 using Ranking.Domain.Enum;
+using Ranking.Domain.Request;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,23 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Team2)
                                         .Include(e => e.Tournament)
                                         .ToListAsync();
+            return _mapper.Map<List<Match>>(matchesList);
+        }
+
+        public async Task<List<Match>> Get(MatchCollectionRequest request)
+        {
+            var query = from match in _ctx.Matches
+                        where (request.Team1ID.HasValue) ? (match.Team1ID == request.Team1ID || match.Team2ID == request.Team1ID) : true
+                        where (request.Team2ID.HasValue) ? (match.Team2ID == request.Team2ID || match.Team1ID == request.Team2ID) : true
+                        where (request.ConfederationID.HasValue) ? match.Team1.ConfederationID == request.ConfederationID || match.Team2.ConfederationID == request.ConfederationID : true
+                        where (request.TournamentID.HasValue) ? match.TournamentID == request.TournamentID : true
+                        where (request.TournamentTypeID.HasValue) ? match.Tournament.TournamentTypeID == request.TournamentTypeID : true
+                        where (request.StartDate.HasValue) ? match.Date >= request.StartDate : true
+                        where (request.EndDate.HasValue) ? match.Date <= request.EndDate : true
+                        select match;
+
+            var matchesList = await query.ToListAsync();
+
             return _mapper.Map<List<Match>>(matchesList);
         }
 

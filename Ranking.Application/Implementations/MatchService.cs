@@ -1,6 +1,7 @@
 ﻿using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
 using Ranking.Domain;
+using Ranking.Domain.Request;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -26,6 +27,11 @@ namespace Ranking.Application.Implementations
         public Task<List<Match>> Get()
         {
             return _matchRepository.Get();
+        }
+
+        public Task<List<Match>> Get(MatchCollectionRequest request)
+        {
+            return _matchRepository.Get(request);
         }
 
         public Task<Match> Get(int id)
