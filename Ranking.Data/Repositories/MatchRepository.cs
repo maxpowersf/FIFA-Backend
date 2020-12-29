@@ -130,5 +130,37 @@ namespace Ranking.Data.Repositories
         {
             await _ctx.SaveChangesAsync();
         }
+
+        public async Task<List<Match>> GetReportMargin()
+        {
+            var query = from match in _ctx.Matches
+                        let margin = Math.Abs(match.GoalsTeam1 - match.GoalsTeam2)
+                        where margin >= 4
+                        orderby margin descending
+                        select match;
+
+            var matchesList = await query.Include(e => e.Team1)
+                                            .Include(e => e.Team2)
+                                            .Include(e => e.Tournament)
+                                            .ToListAsync();
+
+            return _mapper.Map<List<Match>>(matchesList);
+        }
+
+        public async Task<List<Match>> GetReportGoals()
+        {
+            var query = from match in _ctx.Matches
+                        let goals = match.GoalsTeam1 + match.GoalsTeam2
+                        where goals >= 6
+                        orderby goals descending
+                        select match;
+
+            var matchesList = await query.Include(e => e.Team1)
+                                            .Include(e => e.Team2)
+                                            .Include(e => e.Tournament)
+                                            .ToListAsync();
+
+            return _mapper.Map<List<Match>>(matchesList);
+        }
     }
 }

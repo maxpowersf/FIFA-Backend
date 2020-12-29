@@ -19,5 +19,7 @@ namespace Ranking.Application.Repositories
         void Update(Match match);
         Task Delete(int id);
         Task SaveChanges();
+        Task<List<Match>> GetReportMargin();
+        Task<List<Match>> GetReportGoals();
     }
 }

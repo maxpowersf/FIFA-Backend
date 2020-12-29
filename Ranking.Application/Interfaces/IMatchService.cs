@@ -1,5 +1,6 @@
 ﻿using Ranking.Domain;
 using Ranking.Domain.Request;
+using Ranking.Domain.Response;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -17,5 +18,11 @@ namespace Ranking.Application.Interfaces
         Task<Match> Get(int id);
         Task Add(Match match);
         Task Update(Match match);
+        Task<List<StreakCollectionResponse>> GetReportWinning();
+        Task<List<StreakCollectionResponse>> GetReportUnbeaten();
+        Task<List<StreakCollectionResponse>> GetReportLosing();
+        Task<List<StreakCollectionResponse>> GetReportWinningless();
+        Task<List<Match>> GetReportMargin();
+        Task<List<Match>> GetReportGoals();
     }
 }
