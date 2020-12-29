@@ -74,5 +74,41 @@ namespace Ranking.API.Controllers
             _matchService.Update(_mapper.Map<Match>(matchDTO));
             return new OkObjectResult(true);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportMargin()
+        {
+            return new OkObjectResult(await _matchService.GetReportMargin());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportGoals()
+        {
+            return new OkObjectResult(await _matchService.GetReportGoals());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportWinning()
+        {
+            return new OkObjectResult(await _matchService.GetReportWinning());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportUnbeaten()
+        {
+            return new OkObjectResult(await _matchService.GetReportUnbeaten());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportLosing()
+        {
+            return new OkObjectResult(await _matchService.GetReportLosing());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportWinningless()
+        {
+            return new OkObjectResult(await _matchService.GetReportWinningless());
+        }
     }
 }
