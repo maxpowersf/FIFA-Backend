@@ -310,5 +310,123 @@ namespace Ranking.Application.Implementations
 
             return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
         }
+
+        public async Task<List<StreakCollectionResponse>> GetReportCleanSheets()
+        {
+            int amount = 20;
+            var response = new List<StreakCollectionResponse>();
+
+            var teams = await _teamRepository.Get();
+            foreach (var team in teams)
+            {
+                int streak = 0;
+                var streakMatches = new List<Match>();
+
+                var matches = await _matchRepository.GetByTeam(team.Id);
+                foreach (var match in matches.OrderBy(e => e.Date))
+                {
+                    if ((match.Team1ID == team.Id && match.GoalsTeam2 == 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam1 == 0))
+                    {
+                        streak++;
+                        streakMatches.Add(match);
+                    }
+                    else
+                    {
+                        if (streak > 5)
+                        {
+                            var responseItem = new StreakCollectionResponse
+                            {
+                                Team = team,
+                                Streak = streak,
+                                IsCurrent = false,
+                                Matches = new List<Match>()
+                            };
+                            responseItem.Matches.AddRange(streakMatches);
+
+                            response.Add(responseItem);
+                        }
+
+                        streak = 0;
+                        streakMatches.Clear();
+                    }
+                }
+
+                if (streak > 5)
+                {
+                    var responseItem = new StreakCollectionResponse
+                    {
+                        Team = team,
+                        Streak = streak,
+                        IsCurrent = true,
+                        Matches = new List<Match>()
+                    };
+                    responseItem.Matches.AddRange(streakMatches);
+
+                    response.Add(responseItem);
+                }
+            }
+
+            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+        }
+
+        public async Task<List<StreakCollectionResponse>> GetReportScoreless()
+        {
+            int amount = 20;
+            var response = new List<StreakCollectionResponse>();
+
+            var teams = await _teamRepository.Get();
+            foreach (var team in teams)
+            {
+                int streak = 0;
+                var streakMatches = new List<Match>();
+
+                var matches = await _matchRepository.GetByTeam(team.Id);
+                foreach (var match in matches.OrderBy(e => e.Date))
+                {
+                    if ((match.Team1ID == team.Id && match.GoalsTeam1 == 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 == 0))
+                    {
+                        streak++;
+                        streakMatches.Add(match);
+                    }
+                    else
+                    {
+                        if (streak > 5)
+                        {
+                            var responseItem = new StreakCollectionResponse
+                            {
+                                Team = team,
+                                Streak = streak,
+                                IsCurrent = false,
+                                Matches = new List<Match>()
+                            };
+                            responseItem.Matches.AddRange(streakMatches);
+
+                            response.Add(responseItem);
+                        }
+
+                        streak = 0;
+                        streakMatches.Clear();
+                    }
+                }
+
+                if (streak > 5)
+                {
+                    var responseItem = new StreakCollectionResponse
+                    {
+                        Team = team,
+                        Streak = streak,
+                        IsCurrent = true,
+                        Matches = new List<Match>()
+                    };
+                    responseItem.Matches.AddRange(streakMatches);
+
+                    response.Add(responseItem);
+                }
+            }
+
+            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+        }
     }
 }
