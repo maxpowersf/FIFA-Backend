@@ -22,6 +22,8 @@ namespace Ranking.Application.Interfaces
         Task<List<StreakCollectionResponse>> GetReportUnbeaten();
         Task<List<StreakCollectionResponse>> GetReportLosing();
         Task<List<StreakCollectionResponse>> GetReportWinningless();
+        Task<List<StreakCollectionResponse>> GetReportCleanSheets();
+        Task<List<StreakCollectionResponse>> GetReportScoreless();
         Task<List<Match>> GetReportMargin();
         Task<List<Match>> GetReportGoals();
     }

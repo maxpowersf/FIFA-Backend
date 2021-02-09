@@ -110,5 +110,17 @@ namespace Ranking.API.Controllers
         {
             return new OkObjectResult(await _matchService.GetReportWinningless());
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportCleanSheets()
+        {
+            return new OkObjectResult(await _matchService.GetReportCleanSheets());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetReportScoreless()
+        {
+            return new OkObjectResult(await _matchService.GetReportScoreless());
+        }
     }
 }
