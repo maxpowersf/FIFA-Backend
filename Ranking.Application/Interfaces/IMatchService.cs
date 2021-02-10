@@ -1,4 +1,5 @@
 ﻿using Ranking.Domain;
+using Ranking.Domain.Enum;
 using Ranking.Domain.Request;
 using Ranking.Domain.Response;
 using System;
@@ -18,12 +19,7 @@ namespace Ranking.Application.Interfaces
         Task<Match> Get(int id);
         Task Add(Match match);
         Task Update(Match match);
-        Task<List<StreakCollectionResponse>> GetReportWinning();
-        Task<List<StreakCollectionResponse>> GetReportUnbeaten();
-        Task<List<StreakCollectionResponse>> GetReportLosing();
-        Task<List<StreakCollectionResponse>> GetReportWinningless();
-        Task<List<StreakCollectionResponse>> GetReportCleanSheets();
-        Task<List<StreakCollectionResponse>> GetReportScoreless();
+        Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, int? amount = 20);
         Task<List<Match>> GetReportMargin();
         Task<List<Match>> GetReportGoals();
     }

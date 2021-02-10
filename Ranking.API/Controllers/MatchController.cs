@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Ranking.API.DTO;
 using Ranking.Application.Interfaces;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using Ranking.Domain.Request;
 
 namespace Ranking.API.Controllers
@@ -87,40 +88,10 @@ namespace Ranking.API.Controllers
             return new OkObjectResult(await _matchService.GetReportGoals());
         }
 
-        [HttpGet]
-        public async Task<IActionResult> GetReportWinning()
+        [HttpGet("{reportType}")]
+        public async Task<IActionResult> GetReportStreak(ReportType reportType, int? teamId, int? amount)
         {
-            return new OkObjectResult(await _matchService.GetReportWinning());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetReportUnbeaten()
-        {
-            return new OkObjectResult(await _matchService.GetReportUnbeaten());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetReportLosing()
-        {
-            return new OkObjectResult(await _matchService.GetReportLosing());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetReportWinningless()
-        {
-            return new OkObjectResult(await _matchService.GetReportWinningless());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetReportCleanSheets()
-        {
-            return new OkObjectResult(await _matchService.GetReportCleanSheets());
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> GetReportScoreless()
-        {
-            return new OkObjectResult(await _matchService.GetReportScoreless());
+            return new OkObjectResult(await _matchService.GetReportStreak(reportType, teamId, amount));
         }
     }
 }

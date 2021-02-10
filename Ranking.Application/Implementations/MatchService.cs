@@ -1,6 +1,7 @@
 ﻿using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
 using Ranking.Domain.Request;
 using Ranking.Domain.Response;
 using System;
@@ -15,6 +16,8 @@ namespace Ranking.Application.Implementations
     {
         private readonly IMatchRepository _matchRepository;
         private readonly ITeamRepository _teamRepository;
+
+        private const int REPORT_AMOUNT_DEFAULT = 20;
 
         public MatchService(IMatchRepository matchRepository,
                             ITeamRepository teamRepository)
@@ -75,12 +78,20 @@ namespace Ranking.Application.Implementations
             return await _matchRepository.GetReportGoals();
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportWinning()
+        public async Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, int? amount)
         {
-            int amount = 20;
             var response = new List<StreakCollectionResponse>();
 
+            var take = amount ?? REPORT_AMOUNT_DEFAULT;
+
+            var funcReport = GetReportFunction(reportType);
+
             var teams = await _teamRepository.Get();
+            if(teamId != 0)
+            {
+                teams = teams.Where(e => e.Id == teamId).ToList();
+            }
+
             foreach (var team in teams)
             {
                 int streak = 0;
@@ -89,8 +100,7 @@ namespace Ranking.Application.Implementations
                 var matches = await _matchRepository.GetByTeam(team.Id);
                 foreach (var match in matches.OrderBy(e => e.Date))
                 {
-                    if ((match.Team1ID == team.Id && match.GoalsTeam1 > match.GoalsTeam2) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam2 > match.GoalsTeam1))
+                    if(funcReport(match, team))
                     {
                         streak++;
                         streakMatches.Add(match);
@@ -131,302 +141,64 @@ namespace Ranking.Application.Implementations
                 }
             }
 
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+            return response.OrderByDescending(e => e.Streak).Take(take).ToList();
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportUnbeaten()
+        private Func<Match, Team, bool> GetReportFunction(ReportType reportType)
         {
-            int amount = 20;
-            var response = new List<StreakCollectionResponse>();
-
-            var teams = await _teamRepository.Get();
-            foreach(var team in teams)
+            switch (reportType)
             {
-                int streak = 0;
-                var streakMatches = new List<Match>();
-
-                var matches = await _matchRepository.GetByTeam(team.Id);
-                foreach(var match in matches.OrderBy(e => e.Date))
-                {
-                    if((match.Team1ID == team.Id && match.GoalsTeam1 >= match.GoalsTeam2) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam2 >= match.GoalsTeam1))
-                    {
-                        streak++;
-                        streakMatches.Add(match);
-                    }
-                    else
-                    {
-                        if(streak > 10)
-                        {
-                            var responseItem = new StreakCollectionResponse
-                            {
-                                Team = team,
-                                Streak = streak,
-                                IsCurrent = false,
-                                Matches = new List<Match>()
-                            };
-                            responseItem.Matches.AddRange(streakMatches);
-
-                            response.Add(responseItem);
-                        }
-
-                        streak = 0;
-                        streakMatches.Clear();
-                    }
-                }
-
-                if(streak > 10)
-                {
-                    var responseItem = new StreakCollectionResponse
-                    {
-                        Team = team,
-                        Streak = streak,
-                        IsCurrent = true,
-                        Matches = new List<Match>()
-                    };
-                    responseItem.Matches.AddRange(streakMatches);
-
-                    response.Add(responseItem);
-                }
+                case ReportType.Winning:
+                    return GetWinningStreak;
+                case ReportType.Losing:
+                    return GetLosingStreak;
+                case ReportType.Unbeaten:
+                    return GetUnbeatenStreak;
+                case ReportType.Winningless:
+                    return GetWinninglessStreak;
+                case ReportType.CleanSheets:
+                    return GetCleanSheetsStreak;
+                case ReportType.Scoreless:
+                    return GetScorelessStreak;
+                default:
+                    return GetWinningStreak;
             }
-
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportLosing()
+        public bool GetWinningStreak(Match match, Team team)
         {
-            int amount = 20;
-            var response = new List<StreakCollectionResponse>();
-
-            var teams = await _teamRepository.Get();
-            foreach (var team in teams)
-            {
-                int streak = 0;
-                var streakMatches = new List<Match>();
-
-                var matches = await _matchRepository.GetByTeam(team.Id);
-                foreach (var match in matches.OrderBy(e => e.Date))
-                {
-                    if ((match.Team1ID == team.Id && match.GoalsTeam1 < match.GoalsTeam2) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam2 < match.GoalsTeam1))
-                    {
-                        streak++;
-                        streakMatches.Add(match);
-                    }
-                    else
-                    {
-                        if (streak > 0)
-                        {
-                            var responseItem = new StreakCollectionResponse
-                            {
-                                Team = team,
-                                Streak = streak,
-                                IsCurrent = false,
-                                Matches = new List<Match>()
-                            };
-                            responseItem.Matches.AddRange(streakMatches);
-
-                            response.Add(responseItem);
-                        }
-
-                        streak = 0;
-                        streakMatches.Clear();
-                    }
-                }
-
-                if (streak > 0)
-                {
-                    var responseItem = new StreakCollectionResponse
-                    {
-                        Team = team,
-                        Streak = streak,
-                        IsCurrent = true,
-                        Matches = new List<Match>()
-                    };
-                    responseItem.Matches.AddRange(streakMatches);
-
-                    response.Add(responseItem);
-                }
-            }
-
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 > match.GoalsTeam2) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 > match.GoalsTeam1));
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportWinningless()
+        public bool GetUnbeatenStreak(Match match, Team team)
         {
-            int amount = 20;
-            var response = new List<StreakCollectionResponse>();
-
-            var teams = await _teamRepository.Get();
-            foreach (var team in teams)
-            {
-                int streak = 0;
-                var streakMatches = new List<Match>();
-
-                var matches = await _matchRepository.GetByTeam(team.Id);
-                foreach (var match in matches.OrderBy(e => e.Date))
-                {
-                    if ((match.Team1ID == team.Id && match.GoalsTeam1 <= match.GoalsTeam2) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam2 <= match.GoalsTeam1))
-                    {
-                        streak++;
-                        streakMatches.Add(match);
-                    }
-                    else
-                    {
-                        if (streak > 10)
-                        {
-                            var responseItem = new StreakCollectionResponse
-                            {
-                                Team = team,
-                                Streak = streak,
-                                IsCurrent = false,
-                                Matches = new List<Match>()
-                            };
-                            responseItem.Matches.AddRange(streakMatches);
-
-                            response.Add(responseItem);
-                        }
-
-                        streak = 0;
-                        streakMatches.Clear();
-                    }
-                }
-
-                if (streak > 10)
-                {
-                    var responseItem = new StreakCollectionResponse
-                    {
-                        Team = team,
-                        Streak = streak,
-                        IsCurrent = true,
-                        Matches = new List<Match>()
-                    };
-                    responseItem.Matches.AddRange(streakMatches);
-
-                    response.Add(responseItem);
-                }
-            }
-
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 >= match.GoalsTeam2) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 >= match.GoalsTeam1));
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportCleanSheets()
+        public bool GetLosingStreak(Match match, Team team)
         {
-            int amount = 20;
-            var response = new List<StreakCollectionResponse>();
-
-            var teams = await _teamRepository.Get();
-            foreach (var team in teams)
-            {
-                int streak = 0;
-                var streakMatches = new List<Match>();
-
-                var matches = await _matchRepository.GetByTeam(team.Id);
-                foreach (var match in matches.OrderBy(e => e.Date))
-                {
-                    if ((match.Team1ID == team.Id && match.GoalsTeam2 == 0) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam1 == 0))
-                    {
-                        streak++;
-                        streakMatches.Add(match);
-                    }
-                    else
-                    {
-                        if (streak > 5)
-                        {
-                            var responseItem = new StreakCollectionResponse
-                            {
-                                Team = team,
-                                Streak = streak,
-                                IsCurrent = false,
-                                Matches = new List<Match>()
-                            };
-                            responseItem.Matches.AddRange(streakMatches);
-
-                            response.Add(responseItem);
-                        }
-
-                        streak = 0;
-                        streakMatches.Clear();
-                    }
-                }
-
-                if (streak > 5)
-                {
-                    var responseItem = new StreakCollectionResponse
-                    {
-                        Team = team,
-                        Streak = streak,
-                        IsCurrent = true,
-                        Matches = new List<Match>()
-                    };
-                    responseItem.Matches.AddRange(streakMatches);
-
-                    response.Add(responseItem);
-                }
-            }
-
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 < match.GoalsTeam2) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 < match.GoalsTeam1));
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportScoreless()
+        public bool GetWinninglessStreak(Match match, Team team)
         {
-            int amount = 20;
-            var response = new List<StreakCollectionResponse>();
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 <= match.GoalsTeam2) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 <= match.GoalsTeam1));
+        }
 
-            var teams = await _teamRepository.Get();
-            foreach (var team in teams)
-            {
-                int streak = 0;
-                var streakMatches = new List<Match>();
+        public bool GetCleanSheetsStreak(Match match, Team team)
+        {
+            return ((match.Team1ID == team.Id && match.GoalsTeam2 == 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam1 == 0));
+        }
 
-                var matches = await _matchRepository.GetByTeam(team.Id);
-                foreach (var match in matches.OrderBy(e => e.Date))
-                {
-                    if ((match.Team1ID == team.Id && match.GoalsTeam1 == 0) ||
-                        (match.Team2ID == team.Id && match.GoalsTeam2 == 0))
-                    {
-                        streak++;
-                        streakMatches.Add(match);
-                    }
-                    else
-                    {
-                        if (streak > 5)
-                        {
-                            var responseItem = new StreakCollectionResponse
-                            {
-                                Team = team,
-                                Streak = streak,
-                                IsCurrent = false,
-                                Matches = new List<Match>()
-                            };
-                            responseItem.Matches.AddRange(streakMatches);
-
-                            response.Add(responseItem);
-                        }
-
-                        streak = 0;
-                        streakMatches.Clear();
-                    }
-                }
-
-                if (streak > 5)
-                {
-                    var responseItem = new StreakCollectionResponse
-                    {
-                        Team = team,
-                        Streak = streak,
-                        IsCurrent = true,
-                        Matches = new List<Match>()
-                    };
-                    responseItem.Matches.AddRange(streakMatches);
-
-                    response.Add(responseItem);
-                }
-            }
-
-            return response.OrderByDescending(e => e.Streak).Take(amount).ToList();
+        public bool GetScorelessStreak(Match match, Team team)
+        {
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 == 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 == 0));
         }
     }
 }
