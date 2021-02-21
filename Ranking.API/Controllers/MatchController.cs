@@ -89,9 +89,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet("{reportType}")]
-        public async Task<IActionResult> GetReportStreak(ReportType reportType, int? teamId, int? amount)
+        public async Task<IActionResult> GetReportStreak(ReportType reportType, int? teamId, bool active, int? amount)
         {
-            return new OkObjectResult(await _matchService.GetReportStreak(reportType, teamId, amount));
+            return new OkObjectResult(await _matchService.GetReportStreak(reportType, teamId, active, amount));
         }
     }
 }

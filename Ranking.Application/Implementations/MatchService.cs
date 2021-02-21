@@ -78,7 +78,7 @@ namespace Ranking.Application.Implementations
             return await _matchRepository.GetReportGoals();
         }
 
-        public async Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, int? amount)
+        public async Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, bool active, int? amount)
         {
             var response = new List<StreakCollectionResponse>();
 
@@ -139,6 +139,11 @@ namespace Ranking.Application.Implementations
 
                     response.Add(responseItem);
                 }
+            }
+
+            if (active)
+            {
+                response = response.Where(e => e.IsCurrent).ToList();
             }
 
             return response.OrderByDescending(e => e.Streak).Take(take).ToList();
