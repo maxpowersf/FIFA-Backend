@@ -19,7 +19,7 @@ namespace Ranking.Application.Interfaces
         Task<Match> Get(int id);
         Task Add(Match match);
         Task Update(Match match);
-        Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, int? amount = 20);
+        Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, bool active, int? amount = 20);
         Task<List<Match>> GetReportMargin();
         Task<List<Match>> GetReportGoals();
     }
