@@ -136,7 +136,7 @@ namespace Ranking.Data.Repositories
             var query = from match in _ctx.Matches
                         let margin = Math.Abs(match.GoalsTeam1 - match.GoalsTeam2)
                         where margin >= 4
-                        orderby margin descending
+                        orderby margin descending, match.Date descending
                         select match;
 
             var matchesList = await query.Include(e => e.Team1)
@@ -152,7 +152,7 @@ namespace Ranking.Data.Repositories
             var query = from match in _ctx.Matches
                         let goals = match.GoalsTeam1 + match.GoalsTeam2
                         where goals >= 6
-                        orderby goals descending
+                        orderby goals descending, match.Date descending
                         select match;
 
             var matchesList = await query.Include(e => e.Team1)
