@@ -10,6 +10,7 @@ namespace Ranking.Application.Repositories
     {
         Task<List<Goalscorer>> Get();
         Task<List<Goalscorer>> GetByTournament(int id);
+        Task<Goalscorer> GetByPlayerAndTournament(int playerId, int tournamentId);
         Task<Goalscorer> Get(int id);
         Task Add(Goalscorer goalscorer);
         void Update(Goalscorer goalscorer);

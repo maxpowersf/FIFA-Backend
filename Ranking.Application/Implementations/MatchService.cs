@@ -170,37 +170,37 @@ namespace Ranking.Application.Implementations
             }
         }
 
-        public bool GetWinningStreak(Match match, Team team)
+        private bool GetWinningStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 > match.GoalsTeam2) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 > match.GoalsTeam1));
         }
 
-        public bool GetUnbeatenStreak(Match match, Team team)
+        private bool GetUnbeatenStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 >= match.GoalsTeam2) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 >= match.GoalsTeam1));
         }
 
-        public bool GetLosingStreak(Match match, Team team)
+        private bool GetLosingStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 < match.GoalsTeam2) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 < match.GoalsTeam1));
         }
 
-        public bool GetWinninglessStreak(Match match, Team team)
+        private bool GetWinninglessStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 <= match.GoalsTeam2) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 <= match.GoalsTeam1));
         }
 
-        public bool GetCleanSheetsStreak(Match match, Team team)
+        private bool GetCleanSheetsStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam2 == 0) ||
                         (match.Team2ID == team.Id && match.GoalsTeam1 == 0));
         }
 
-        public bool GetScorelessStreak(Match match, Team team)
+        private bool GetScorelessStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 == 0) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 == 0));

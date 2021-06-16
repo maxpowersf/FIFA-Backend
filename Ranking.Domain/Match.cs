@@ -25,5 +25,7 @@ namespace Ranking.Domain
         public int PenaltiesTeam2 { get; set; }
         public MatchResult MatchResult { get; set; }
         public string Result { get { return MatchResult.ToString(); } }
+        public List<Goalscorer> Team1Goalscorers { get; set; }
+        public List<Goalscorer> Team2Goalscorers { get; set; }
     }
 }

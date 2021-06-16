@@ -38,6 +38,8 @@ namespace Ranking.API.Mapper
 
             CreateMap<MatchCollectionRequestDTO, Domain.Request.MatchCollectionRequest>();
 
+            CreateMap<MatchGoalscorersDTO, Goalscorer>();
+
             CreateMap<MatchDTO, Match>()
                 .ForMember(e => e.MatchRound, opt => opt.MapFrom(e => (MatchRound)e.MatchRoundId));
             CreateMap<Match, Data.Entities.Matches>()
