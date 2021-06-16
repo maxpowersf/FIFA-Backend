@@ -5,6 +5,7 @@ using Ranking.Domain;
 using Ranking.Domain.Enum;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -20,6 +21,8 @@ namespace Ranking.Application.Implementations
         private readonly IH2HRepository _h2hRepository;
         private readonly IH2HWorldCupRepository _h2hWorldCupRepository;
         private readonly IMatchRepository _matchRepository;
+        private readonly IGoalscorerRepository _goalscorerRepository;
+        private readonly IPlayerRepository _playerRepository;
 
         public RankingService(IRankingRepository rankingRepository, 
             ITeamRepository teamRepository, 
@@ -28,7 +31,9 @@ namespace Ranking.Application.Implementations
             ITeamStatWorldCupRepository teamStatWorldCupRepository,
             IH2HRepository h2hRepository,
             IH2HWorldCupRepository h2hWorldCupRepository,
-            IMatchRepository matchRepository)
+            IMatchRepository matchRepository,
+            IGoalscorerRepository goalscorerRepository,
+            IPlayerRepository playerRepository)
         {
             this._rankingRepository = rankingRepository;
             this._teamRepository = teamRepository;
@@ -38,6 +43,8 @@ namespace Ranking.Application.Implementations
             this._h2hRepository = h2hRepository;
             this._h2hWorldCupRepository = h2hWorldCupRepository;
             this._matchRepository = matchRepository;
+            this._goalscorerRepository = goalscorerRepository;
+            this._playerRepository = playerRepository;
         }
 
         public async Task AddMatch(Match match)
@@ -108,6 +115,45 @@ namespace Ranking.Application.Implementations
 
             team2.TotalPoints += team2Points;
             _teamRepository.Update(team2);
+            #endregion
+
+            #region Update Goalscorers
+            var matchGoalscorers = match.Team1Goalscorers.Union(match.Team2Goalscorers);
+            foreach (Goalscorer matchGoalscorer in matchGoalscorers)
+            {
+                var goalscorer = await GetOrCreateGoalscorer(matchGoalscorer.PlayerID, match.TournamentID);
+                goalscorer.PlayerID = matchGoalscorer.PlayerID;
+                goalscorer.TournamentID = match.TournamentID;
+                goalscorer.Goals += matchGoalscorer.Goals;
+
+                if (goalscorer.Id == 0)
+                {
+                    await _goalscorerRepository.Add(goalscorer);
+                }
+                else
+                {
+                    _goalscorerRepository.Update(goalscorer);
+                }
+
+                var player = await _playerRepository.Get(matchGoalscorer.PlayerID);
+                switch (tournament.TournamentType.Format)
+                {
+                    case TournamentFormat.Qualification:
+                        player.QualificationGoals += matchGoalscorer.Goals;
+                        break;
+                    case TournamentFormat.WorldCup:
+                        player.WorldCupGoals += matchGoalscorer.Goals;
+                        break;
+                    case TournamentFormat.ConfederationsCup:
+                        player.ConfederationsGoals += matchGoalscorer.Goals;
+                        break;
+                    case TournamentFormat.ConfederationTournament:
+                        player.ConfederationTournamentGoals += matchGoalscorer.Goals;
+                        break;
+                }
+
+                _playerRepository.Update(player);
+            }
             #endregion
 
             await _matchRepository.Add(match);
@@ -317,6 +363,17 @@ namespace Ranking.Application.Implementations
             h2hTeam2.GamesPlayed++;
             h2hTeam2.GoalsFavor += match.GoalsTeam2;
             h2hTeam2.GoalsAgainst += match.GoalsTeam1;
+        }
+
+        private async Task<Goalscorer> GetOrCreateGoalscorer(int playerId, int tournamentId)
+        {
+            var goalscorer = await _goalscorerRepository.GetByPlayerAndTournament(playerId, tournamentId);
+            if (goalscorer == null)
+            {
+                goalscorer = new Goalscorer();
+            }
+
+            return goalscorer;
         }
 
         private MatchResult GetMatchResult(Match match)

@@ -44,6 +44,13 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<List<Goalscorer>>(goalscorers);
         }
 
+        public async Task<Goalscorer> GetByPlayerAndTournament(int playerId, int tournamentId)
+        {
+            var goalscorer = await _ctx.Goalscorers.FirstOrDefaultAsync(e => e.PlayerID == playerId && e.TournamentID == tournamentId);
+
+            return _mapper.Map<Goalscorer>(goalscorer);
+        }
+
         public async Task<Goalscorer> Get(int id)
         {
             var goalscorer = await _ctx.Goalscorers.FirstOrDefaultAsync(e => e.GoalscorerID == id);

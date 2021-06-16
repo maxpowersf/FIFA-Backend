@@ -18,5 +18,7 @@ namespace Ranking.API.DTO
         public int GoalsTeam2 { get; set; }
         public int PenaltiesTeam1 { get; set; }
         public int PenaltiesTeam2 { get; set; }
+        public List<MatchGoalscorersDTO> Team1Goalscorers { get; set; }
+        public List<MatchGoalscorersDTO> Team2Goalscorers { get; set; }
     }
 }
