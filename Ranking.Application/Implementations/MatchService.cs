@@ -113,6 +113,8 @@ namespace Ranking.Application.Implementations
                             {
                                 Team = team,
                                 Streak = streak,
+                                StartDate = streakMatches.OrderBy(e => e.Date).First().Date,
+                                EndDate = streakMatches.OrderByDescending(e => e.Date).First().Date,
                                 IsCurrent = false,
                                 Matches = new List<Match>()
                             };
@@ -132,6 +134,7 @@ namespace Ranking.Application.Implementations
                     {
                         Team = team,
                         Streak = streak,
+                        StartDate = streakMatches.OrderBy(e => e.Date).First().Date,
                         IsCurrent = true,
                         Matches = new List<Match>()
                     };
