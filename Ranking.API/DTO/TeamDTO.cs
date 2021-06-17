@@ -14,6 +14,7 @@ namespace Ranking.API.DTO
         public int ActualRank { get; set; }
         public int LowestRank { get; set; }
         public int HighestRank { get; set; }
+        public int RankingChange { get; set; }
         public decimal TotalPoints { get; set; }
         public int WorldCupTitles { get; set; }
         public int ConfederationsCupTitles { get; set; }
