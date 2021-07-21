@@ -156,7 +156,7 @@ namespace Ranking.Sync
                     Player player = _playerService.Get(goalscorer.Player, goalscorer.Team).Result;
                     if (player == null)
                     {
-                        ConsoleMessage($"Player: {goalscorer.Player} - Player not found", ConsoleColor.DarkRed);
+                        ConsoleMessage($"Player: {goalscorer.Player} from {goalscorer.Team} - Player not found", ConsoleColor.DarkRed);
                         continue;
                     }
 
@@ -172,7 +172,7 @@ namespace Ranking.Sync
                 }
                 catch (Exception ex)
                 {
-                    ConsoleMessage($"Player: {goalscorer.Player} - Error processing data: {ex.Message}", ConsoleColor.DarkRed);
+                    ConsoleMessage($"Player: {goalscorer.Player} from {goalscorer.Team} - Error processing data: {ex.Message}", ConsoleColor.DarkRed);
                 }
             }
         }
