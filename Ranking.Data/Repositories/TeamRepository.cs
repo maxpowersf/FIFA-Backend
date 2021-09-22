@@ -26,6 +26,7 @@ namespace Ranking.Data.Repositories
             var teamList = await _ctx.Teams.AsNoTracking()
                                         .Include(e => e.Confederation)
                                         .Include(e => e.Rankings)
+                                        .OrderBy(e => e.Name)
                                         .ToListAsync();
             teamList.ForEach(x => x.Rankings = x.Rankings.OrderBy(y => y.Year).ToList());
             return _mapper.Map<List<Team>>(teamList);
@@ -54,6 +55,7 @@ namespace Ranking.Data.Repositories
                                         .Include(e => e.Confederation)
                                         .Include(e => e.Rankings)
                                         .Where(e => e.ConfederationID == confederationID)
+                                        .OrderBy(e => e.Name)
                                         .ToListAsync();
             return _mapper.Map<List<Team>>(teamList);
         }
