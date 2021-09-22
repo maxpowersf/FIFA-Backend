@@ -71,7 +71,10 @@ namespace Ranking.Application.Implementations
                     _teamRepository.Update(team);
                 }
             }
-            
+
+            tournament.FinalPositions = true;
+            _tournamentRepository.Update(tournament);
+
             await _positionRepository.SaveChanges();
         }
 

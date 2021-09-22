@@ -18,6 +18,7 @@ namespace Ranking.Domain
         public int? ConfederationID { get; set; }
         public Confederation Confederation { get; set; }
         public string ConfederationName { get { return Confederation != null ? Confederation.Name : null; } }
+        public bool FinalPositions { get; set; }
         public List<Position> Positions { get; set; }
     }
 }
