@@ -66,7 +66,6 @@ namespace Ranking.API
         {
             app.UseCors(builder => {
                 builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
-
             });
 
             if (env.IsDevelopment())
