@@ -6,7 +6,7 @@ namespace Ranking.Domain.Response
 {
     public class Group
     {
-        public string Name { get; set; }
+        public string GroupName { get; set; }
         public List<GroupPosition> Positions { get; set; }
 
         public Group()

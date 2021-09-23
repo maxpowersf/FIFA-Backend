@@ -60,7 +60,9 @@ namespace Ranking.Data.Repositories
         {
             var matchesList = await _ctx.Matches
                                         .Include(e => e.Team1)
+                                            .ThenInclude(e => e.Confederation)
                                         .Include(e => e.Team2)
+                                            .ThenInclude(e => e.Confederation)
                                         .Where(e => e.TournamentID == tournamentId)
                                         .OrderBy(e => e.Date)
                                             .ThenBy(e => e.MatchRoundID)

@@ -68,9 +68,9 @@ namespace Ranking.Application.Implementations
                     Group newGroup = new Group();
                     foreach(Match match in group)
                     {
-                        if(newGroup.Name == null)
+                        if(newGroup.GroupName == null)
                         {
-                            newGroup.Name = match.Group;
+                            newGroup.GroupName = match.Group;
                         }
 
                         GroupPosition positionTeam1 = newGroup.Positions.FirstOrDefault(e => e.Team.Id == match.Team1ID);
