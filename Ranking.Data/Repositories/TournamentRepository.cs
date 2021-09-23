@@ -121,6 +121,16 @@ namespace Ranking.Data.Repositories
             return _mapper.Map<Tournament>(tournament);
         }
 
+        public async Task<Tournament> GetWithoutPositions(int id)
+        {
+            var tournament = await _ctx.Tournaments.AsNoTracking()
+                                        .Include(e => e.TournamentType)
+                                            .ThenInclude(e => e.MatchType)
+                                        .FirstOrDefaultAsync(e => e.TournamentID == id);
+
+            return _mapper.Map<Tournament>(tournament);
+        }
+
         public async Task Add(Tournament tournament)
         {
             var tournamentToAdd = _mapper.Map<Tournaments>(tournament);

@@ -49,6 +49,12 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet("{id}")]
+        public async Task<IActionResult> GetCurrentStandings(int id)
+        {
+            return new OkObjectResult(await _tournamentService.GetCurrentStandings(id));
+        }
+
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return new OkObjectResult(await _tournamentService.Get(id));
