@@ -1,8 +1,11 @@
 ﻿using Ranking.Application.Interfaces;
 using Ranking.Application.Repositories;
 using Ranking.Domain;
+using Ranking.Domain.Enum;
+using Ranking.Domain.Response;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,11 +15,13 @@ namespace Ranking.Application.Implementations
     {
         private readonly ITournamentRepository _tournamentRepository;
         private readonly ITeamRepository _teamRepository;
+        private readonly IMatchRepository _matchRepository;
 
-        public TournamentService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository)
+        public TournamentService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository, IMatchRepository matchRepository)
         {
             this._tournamentRepository = tournamentRepository;
             this._teamRepository = teamRepository;
+            this._matchRepository = matchRepository;
         }
 
         public Task<List<Tournament>> Get()
@@ -41,6 +46,82 @@ namespace Ranking.Application.Implementations
         {
             List<Tournament> tournamentList = await _tournamentRepository.GetByTournamentTypeAndConfederation(tournamentTypeId, confederationId);
             return tournamentList;
+        }
+
+        public async Task<TournamentCurrentStandingsResponse> GetCurrentStandings(int id)
+        {
+            var response = new TournamentCurrentStandingsResponse();
+
+            var tournament = await _tournamentRepository.GetWithoutPositions(id);
+            if (tournament != null)
+            {
+                response.Tournament = tournament;
+
+                var matches = await _matchRepository.GetByTournament(id);
+                var groups = matches.Where(e => e.Group != "")
+                                    .GroupBy(e => e.Group)
+                                    .Select(e => e.ToList())
+                                    .ToList();
+
+                foreach(List<Match> group in groups)
+                {
+                    Group newGroup = new Group();
+                    foreach(Match match in group)
+                    {
+                        if(newGroup.Name == null)
+                        {
+                            newGroup.Name = match.Group;
+                        }
+
+                        GroupPosition positionTeam1 = newGroup.Positions.FirstOrDefault(e => e.Team.Id == match.Team1ID);
+                        if(positionTeam1 == null)
+                        {
+                            positionTeam1 = new GroupPosition(match.Team1);
+                            newGroup.Positions.Add(positionTeam1);
+                        }
+
+                        GroupPosition positionTeam2 = newGroup.Positions.FirstOrDefault(e => e.Team.Id == match.Team2ID);
+                        if (positionTeam2 == null)
+                        {
+                            positionTeam2 = new GroupPosition(match.Team2);
+                            newGroup.Positions.Add(positionTeam2);
+                        }
+
+                        switch (match.MatchResult)
+                        {
+                            case MatchResult.Home:
+                                positionTeam1.Wins++;
+                                positionTeam2.Loses++;
+                                break;
+                            case MatchResult.Away:
+                                positionTeam1.Loses++;
+                                positionTeam2.Wins++;
+                                break;
+                            case MatchResult.Draw:
+                                positionTeam1.Draws++;
+                                positionTeam2.Draws++;
+                                break;
+                        }
+
+                        positionTeam1.GoalsFavor += match.GoalsTeam1;
+                        positionTeam1.GoalsAgainst += match.GoalsTeam2;
+                        positionTeam2.GoalsFavor += match.GoalsTeam2;
+                        positionTeam2.GoalsAgainst += match.GoalsTeam1;
+                    }
+
+                    newGroup.Positions = newGroup.Positions.OrderByDescending(e => e.Points)
+                                                            .ThenByDescending(e => e.GoalDifference)
+                                                            .ThenByDescending(e => e.GoalsFavor)
+                                                            .ThenBy(e => e.Team.Name)
+                                                            .ToList();
+
+                    newGroup.Positions.ForEach(e => e.NoPosition = newGroup.Positions.IndexOf(e) + 1);
+
+                    response.Groups.Add(newGroup);
+                }
+            }
+
+            return response;
         }
 
         public Task<Tournament> Get(int id)
