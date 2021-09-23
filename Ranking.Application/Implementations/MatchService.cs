@@ -81,6 +81,7 @@ namespace Ranking.Application.Implementations
         public async Task<List<StreakCollectionResponse>> GetReportStreak(ReportType reportType, int? teamId, bool active, int? amount)
         {
             var response = new List<StreakCollectionResponse>();
+            var streaks = new List<StreakCollectionResponse>();
 
             var take = amount ?? REPORT_AMOUNT_DEFAULT;
 
@@ -120,7 +121,7 @@ namespace Ranking.Application.Implementations
                             };
                             responseItem.Matches.AddRange(streakMatches);
 
-                            response.Add(responseItem);
+                            streaks.Add(responseItem);
                         }
 
                         streak = 0;
@@ -140,16 +141,24 @@ namespace Ranking.Application.Implementations
                     };
                     responseItem.Matches.AddRange(streakMatches);
 
-                    response.Add(responseItem);
+                    streaks.Add(responseItem);
                 }
             }
 
+            streaks = streaks.OrderByDescending(e => e.Streak).ToList();
+
             if (active)
             {
-                response = response.Where(e => e.IsCurrent).ToList();
+                response = streaks.Where(e => e.IsCurrent).Take(take).ToList();
+            }
+            else
+            {
+                var highestActive = streaks.FirstOrDefault(e => e.IsCurrent && streaks.IndexOf(e) > take);
+                response = streaks.Take(take).ToList();
+                response.Add(highestActive);
             }
 
-            return response.OrderByDescending(e => e.Streak).Take(take).ToList();
+            return response;
         }
 
         private Func<Match, Team, bool> GetReportFunction(ReportType reportType)
