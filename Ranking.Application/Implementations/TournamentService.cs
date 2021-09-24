@@ -5,7 +5,9 @@ using Ranking.Domain.Enum;
 using Ranking.Domain.Response;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -58,6 +60,11 @@ namespace Ranking.Application.Implementations
                 response.Tournament = tournament;
 
                 var matches = await _matchRepository.GetByTournament(id);
+                if(matches.Count <= 0)
+                {
+                    return null;
+                }
+
                 var groups = matches.Where(e => e.Group != "")
                                     .GroupBy(e => e.Group)
                                     .Select(e => e.ToList())
@@ -119,6 +126,26 @@ namespace Ranking.Application.Implementations
 
                     response.Groups.Add(newGroup);
                 }
+
+                var playoffs = matches.Where(e => e.MatchRound == MatchRound.Playoff)
+                                        .GroupBy(e => e.MatchRound)
+                                        .Select(e => new RoundMatches
+                                        {
+                                            RoundName = GetMatchRoundDescription(e.FirstOrDefault().MatchRound),
+                                            Matches = e.ToList()
+                                        })
+                                        .ToList();
+                response.Playoffs.AddRange(playoffs);
+
+                var rounds = matches.Where(e => e.MatchRound != MatchRound.Group && e.MatchRound != MatchRound.Playoff)
+                                    .GroupBy(e => e.MatchRound)
+                                    .Select(e => new RoundMatches
+                                    {
+                                        RoundName = GetMatchRoundDescription(e.FirstOrDefault().MatchRound),
+                                        Matches = e.ToList()
+                                    })
+                                    .ToList();
+                response.Rounds.AddRange(rounds);
             }
 
             return response;
@@ -145,6 +172,13 @@ namespace Ranking.Application.Implementations
         {
             await _tournamentRepository.Delete(id);
             await _tournamentRepository.SaveChanges();
+        }
+
+        private string GetMatchRoundDescription(Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
         }
     }
 }
