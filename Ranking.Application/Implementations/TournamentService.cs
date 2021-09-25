@@ -145,6 +145,13 @@ namespace Ranking.Application.Implementations
                                         Matches = e.ToList()
                                     })
                                     .ToList();
+
+                if(tournament.TournamentType.Format == TournamentFormat.Qualification && rounds.Count == 1)
+                {
+                    rounds.FirstOrDefault().RoundName = "Play Offs";
+                    rounds.FirstOrDefault().IsHomeAway = IsHomeAndAway(rounds.FirstOrDefault());
+                }
+
                 response.Rounds.AddRange(rounds);
             }
 
@@ -179,6 +186,21 @@ namespace Ranking.Application.Implementations
             FieldInfo fi = value.GetType().GetField(value.ToString());
             DescriptionAttribute[] attributes = (DescriptionAttribute[])fi.GetCustomAttributes(typeof(DescriptionAttribute), false);
             return (attributes.Length > 0) ? attributes[0].Description : value.ToString();
+        }
+
+        private bool IsHomeAndAway(RoundMatches round)
+        {
+            if(round.Matches.Count != 2)
+            {
+                return false;
+            }
+
+            if((round.Matches[0].Team1ID != round.Matches[1].Team2ID) && (round.Matches[0].Team2ID != round.Matches[1].Team1ID))
+            {
+                return false;
+            }
+
+            return true;
         }
     }
 }
