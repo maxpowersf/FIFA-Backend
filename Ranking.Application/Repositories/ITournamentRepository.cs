@@ -12,6 +12,7 @@ namespace Ranking.Application.Repositories
         Task<List<Tournament>> GetByTeam(int teamId, int confederationId);
         Task<List<Tournament>> GetByTournamentTypeWithPositions(int tournamentTypeId);
         Task<List<Tournament>> GetByTournamentTypeAndConfederation(int tournamentTypeId, int confederationId);
+        Task<Tournament> GetByQualificationYear(int year);
         Task<Tournament> GetWithoutPositions(int id);
         Task<Tournament> Get(int id);
         Task Add(Tournament tournament);

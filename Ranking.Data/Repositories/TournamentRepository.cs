@@ -28,7 +28,6 @@ namespace Ranking.Data.Repositories
             var tournamentList = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
                                         .Include(e => e.Confederation)
-                                        .Include(e => e.Positions)
                                         .OrderBy(e => e.Year)
                                         .ThenBy(e => e.TournamentType.Name)
                                         .ThenBy(e => e.Confederation.Name)
@@ -117,6 +116,14 @@ namespace Ranking.Data.Repositories
                                                             .ThenByDescending(x => x.Round)
                                                             .ToList();
             }
+
+            return _mapper.Map<Tournament>(tournament);
+        }
+        public async Task<Tournament> GetByQualificationYear(int year)
+        {
+            var tournament = await _ctx.Tournaments
+                                        .Include(e => e.TournamentType)
+                                        .FirstOrDefaultAsync(e => e.Year == year && e.TournamentType.FormatID == (int)TournamentFormat.WorldCup);
 
             return _mapper.Map<Tournament>(tournament);
         }

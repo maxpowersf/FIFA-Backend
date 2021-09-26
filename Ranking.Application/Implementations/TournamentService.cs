@@ -18,12 +18,18 @@ namespace Ranking.Application.Implementations
         private readonly ITournamentRepository _tournamentRepository;
         private readonly ITeamRepository _teamRepository;
         private readonly IMatchRepository _matchRepository;
+        private readonly IPositionRepository _positionRepository;
 
-        public TournamentService(ITournamentRepository tournamentRepository, ITeamRepository teamRepository, IMatchRepository matchRepository)
+        public TournamentService(
+            ITournamentRepository tournamentRepository,
+            ITeamRepository teamRepository,
+            IMatchRepository matchRepository,
+            IPositionRepository positionRepository)
         {
             this._tournamentRepository = tournamentRepository;
             this._teamRepository = teamRepository;
             this._matchRepository = matchRepository;
+            this._positionRepository = positionRepository;
         }
 
         public Task<List<Tournament>> Get()
@@ -146,10 +152,31 @@ namespace Ranking.Application.Implementations
                                     })
                                     .ToList();
 
-                if(tournament.TournamentType.Format == TournamentFormat.Qualification && rounds.Count == 1)
+                if(tournament.TournamentType.Format == TournamentFormat.Qualification)
                 {
-                    rounds.FirstOrDefault().RoundName = "Play Offs";
-                    rounds.FirstOrDefault().IsHomeAway = IsHomeAndAway(rounds.FirstOrDefault());
+                    if (rounds.Count == 1)
+                    {
+                        rounds.FirstOrDefault().RoundName = "Play Offs";
+                        rounds.FirstOrDefault().IsHomeAway = IsHomeAndAway(rounds.FirstOrDefault());
+                    }
+
+                    if (tournament.FinalPositions) {
+                        var positions = await _positionRepository.GetByTournament(tournament.Id);
+                        var tournamentToQualify = await _tournamentRepository.GetByQualificationYear(tournament.Year);
+
+                        foreach(Group group in response.Groups)
+                        {
+                            foreach(GroupPosition position in group.Positions)
+                            {
+                                var tournamentPosition = positions.FirstOrDefault(x => x.TeamID == position.Team.Id);
+                                if(tournamentPosition != null)
+                                {
+                                    position.Qualified = tournamentPosition.Qualified;
+                                    position.AsHosts = (tournamentToQualify.Host == position.Team.Name);
+                                }
+                            }
+                        }
+                    }
                 }
 
                 response.Rounds.AddRange(rounds);
