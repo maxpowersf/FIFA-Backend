@@ -55,6 +55,12 @@ namespace Ranking.API.Controllers
         }
 
         [HttpGet("{id}")]
+        public async Task<IActionResult> GetFinalTable(int id)
+        {
+            return new OkObjectResult(await _tournamentService.GetFinalTable(id));
+        }
+
+        [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
             return new OkObjectResult(await _tournamentService.Get(id));
