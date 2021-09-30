@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Ranking.Domain.Enum;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Reflection;
 
 namespace Ranking.Domain.Response
 {
@@ -20,7 +23,7 @@ namespace Ranking.Domain.Response
     public class RoundMatches
     {
         public string RoundName { get; set; }
-        public Boolean IsHomeAway { get; set; }
+        public bool IsHomeAway { get; set; }
         public List<Match> Matches { get; set; }
 
         public RoundMatches()
@@ -43,6 +46,8 @@ namespace Ranking.Domain.Response
     public class GroupPosition
     {
         public Team Team { get; set; }
+        public MatchRound HighestRound { get; set; }
+        public string Result { get; set; }
         public int NoPosition { get; set; }
         public int Points { get { return (Wins * 3) + Draws; } }
         public int GamesPlayed { get { return Wins + Draws + Loses; } }
@@ -58,6 +63,7 @@ namespace Ranking.Domain.Response
         public GroupPosition(Team team)
         {
             this.Team = team;
+            this.Result = GetMatchRoundDescription(HighestRound);
             this.NoPosition = 1;
             this.Wins = 0;
             this.Draws = 0;
@@ -65,6 +71,13 @@ namespace Ranking.Domain.Response
             this.GoalsFavor = 0;
             this.GoalsAgainst = 0;
             this.Qualified = false;
+        }
+
+        private string GetMatchRoundDescription(System.Enum value)
+        {
+            FieldInfo fi = value.GetType().GetField(value.ToString());
+            DescriptionAttribute[] attributes = (DescriptionAttribute[])fi?.GetCustomAttributes(typeof(DescriptionAttribute), false);
+            return (attributes != null && attributes.Length > 0) ? attributes[0].Description : value.ToString();
         }
     }
 }

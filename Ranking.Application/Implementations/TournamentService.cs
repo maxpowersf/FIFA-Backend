@@ -185,6 +185,27 @@ namespace Ranking.Application.Implementations
             return response;
         }
 
+        public async Task<List<GroupPosition>> GetFinalTable(int id)
+        {
+            var response = new List<GroupPosition>();
+
+            var tournament = await _tournamentRepository.GetWithoutPositions(id);
+            if (tournament != null)
+            {
+                var matches = await _matchRepository.GetByTournament(id);
+                if (matches.Count <= 0 || 
+                    (tournament.TournamentType.Format == TournamentFormat.ConfederationTournament && 
+                    !matches.Any(e => e.MatchRound == MatchRound.Group)))
+                {
+                    return null;
+                }
+
+                response = GetFinalStandingsByPointsOrRound(matches, tournament);
+            }
+
+            return response;
+        }
+
         public Task<Tournament> Get(int id)
         {
             return _tournamentRepository.Get(id);
@@ -228,6 +249,161 @@ namespace Ranking.Application.Implementations
             }
 
             return true;
+        }
+
+        private List<GroupPosition> GetFinalStandingsByPointsOrRound(List<Match> matches, Tournament tournament)
+        {
+            if(tournament.TournamentType.Format == TournamentFormat.ConfederationTournament)
+            {
+                matches = matches.Where(e => e.MatchRound != MatchRound.Playoff).ToList();
+            }
+
+            List<GroupPosition> positions = new List<GroupPosition>();
+            foreach (Match match in matches)
+            {
+                GroupPosition positionTeam1 = positions.FirstOrDefault(e => e.Team.Id == match.Team1ID);
+                if (positionTeam1 == null)
+                {
+                    positionTeam1 = new GroupPosition(match.Team1);
+                    positions.Add(positionTeam1);
+                }
+
+                GroupPosition positionTeam2 = positions.FirstOrDefault(e => e.Team.Id == match.Team2ID);
+                if (positionTeam2 == null)
+                {
+                    positionTeam2 = new GroupPosition(match.Team2);
+                    positions.Add(positionTeam2);
+                }
+
+                switch (GetMatchResult(match))
+                {
+                    case MatchResult.Home:
+                        positionTeam1.Wins++;
+                        positionTeam2.Loses++;
+                        break;
+                    case MatchResult.Away:
+                        positionTeam1.Loses++;
+                        positionTeam2.Wins++;
+                        break;
+                    case MatchResult.Draw:
+                        positionTeam1.Draws++;
+                        positionTeam2.Draws++;
+                        break;
+                }
+
+                positionTeam1.GoalsFavor += match.GoalsTeam1;
+                positionTeam1.GoalsAgainst += match.GoalsTeam2;
+                positionTeam2.GoalsFavor += match.GoalsTeam2;
+                positionTeam2.GoalsAgainst += match.GoalsTeam1;
+
+                if(positionTeam1.HighestRound < match.MatchRound)
+                {
+                    positionTeam1.HighestRound = match.MatchRound;
+                    positionTeam1.Result = GetMatchRoundDescription(match.MatchRound);
+
+                    if(tournament.TournamentType.Format == TournamentFormat.Qualification && match.MatchRound == MatchRound.Final)
+                    {
+                        positionTeam1.Result = "Play Offs";
+                    }
+                }
+
+                if (positionTeam2.HighestRound < match.MatchRound)
+                {
+                    positionTeam2.HighestRound = match.MatchRound;
+                    positionTeam2.Result = GetMatchRoundDescription(match.MatchRound);
+
+                    if (tournament.TournamentType.Format == TournamentFormat.Qualification && match.MatchRound == MatchRound.Final)
+                    {
+                        positionTeam2.Result = "Play Offs";
+                    }
+                }
+            }
+
+            if(tournament.TournamentType.Format == TournamentFormat.Qualification)
+            {
+                positions = positions.OrderByDescending(e => e.Points)
+                                    .ThenByDescending(e => e.GoalDifference)
+                                    .ThenByDescending(e => e.GoalsFavor)
+                                    .ThenBy(e => e.Team.Name)
+                                    .ToList();
+            }
+            else
+            {
+                positions = positions.OrderByDescending(e => e.HighestRound)
+                                    .ThenByDescending(e => e.Points)
+                                    .ThenByDescending(e => e.GoalDifference)
+                                    .ThenByDescending(e => e.GoalsFavor)
+                                    .ThenBy(e => e.Team.Name)
+                                    .ToList();
+            }
+
+            positions.ForEach(e => e.NoPosition = positions.IndexOf(e) + 1);
+
+            if(tournament.TournamentType.Format != TournamentFormat.Qualification)
+            {
+                var thirdPlaceMatch = matches.FirstOrDefault(e => e.MatchRound == MatchRound.ThirdPlace);
+                if (thirdPlaceMatch != null)
+                {
+                    var team1 = positions.FirstOrDefault(e => e.Team.Id == thirdPlaceMatch.Team1ID);
+                    var team2 = positions.FirstOrDefault(e => e.Team.Id == thirdPlaceMatch.Team2ID);
+                    if (thirdPlaceMatch.GoalsTeam1 > thirdPlaceMatch.GoalsTeam2 || (thirdPlaceMatch.PenaltiesTeam1 > thirdPlaceMatch.PenaltiesTeam2))
+                    {
+                        team1.NoPosition = 3;
+                        team1.Result = "Tercero";
+                        team2.NoPosition = 4;
+                        team2.Result = "Cuarto";
+                    }
+                    else if (thirdPlaceMatch.GoalsTeam2 > thirdPlaceMatch.GoalsTeam1 || (thirdPlaceMatch.PenaltiesTeam2 > thirdPlaceMatch.PenaltiesTeam1))
+                    {
+                        team2.NoPosition = 3;
+                        team2.Result = "Tercero";
+                        team1.NoPosition = 4;
+                        team1.Result = "Cuarto";
+                    }
+                }
+
+                var finalMatch = matches.FirstOrDefault(e => e.MatchRound == MatchRound.Final);
+                var finalteam1 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team1ID);
+                var finalteam2 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team2ID);
+                if (finalMatch.GoalsTeam1 > finalMatch.GoalsTeam2 || (finalMatch.PenaltiesTeam1 > finalMatch.PenaltiesTeam2))
+                {
+                    finalteam1.NoPosition = 1;
+                    finalteam1.Result = "Campeón";
+                    finalteam2.NoPosition = 2;
+                    finalteam2.Result = "Sub Campeón";
+                }
+                else if (finalMatch.GoalsTeam2 > finalMatch.GoalsTeam1 || (finalMatch.PenaltiesTeam2 > finalMatch.PenaltiesTeam1))
+                {
+                    finalteam2.NoPosition = 1;
+                    finalteam2.Result = "Campeón";
+                    finalteam1.NoPosition = 2;
+                    finalteam1.Result = "Sub Campeón";
+                }
+            }
+
+            if(tournament.ConfederationID != null)
+            {
+                positions = positions.Where(e => e.Team.ConfederationID == tournament.ConfederationID).ToList();
+            }
+
+            return positions.OrderBy(e => e.NoPosition).ToList();
+        }
+
+        private MatchResult GetMatchResult(Match match)
+        {
+            MatchResult result = MatchResult.Draw;
+
+            if(match.GoalsTeam1 > match.GoalsTeam2)
+            {
+                result = MatchResult.Home;
+            }
+
+            if(match.GoalsTeam2 > match.GoalsTeam1)
+            {
+                result = MatchResult.Away;
+            }
+
+            return result;
         }
     }
 }

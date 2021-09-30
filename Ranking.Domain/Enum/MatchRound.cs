@@ -7,10 +7,10 @@ namespace Ranking.Domain.Enum
 {
     public enum MatchRound
     {
-        [Description("Group")]
-        Group = 1,
         [Description("Play Off")]
-        Playoff = 2,
+        Playoff = 1,
+        [Description("Group")]
+        Group = 2,
         [Description("Round of 16")]
         Round16 = 3,
         [Description("Quarter Final")]
