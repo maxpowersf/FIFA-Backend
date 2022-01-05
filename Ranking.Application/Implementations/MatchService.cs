@@ -175,8 +175,12 @@ namespace Ranking.Application.Implementations
                     return GetWinninglessStreak;
                 case ReportType.CleanSheets:
                     return GetCleanSheetsStreak;
+                case ReportType.ScoringGoals:
+                    return GetScoringGoalsStreak;
                 case ReportType.Scoreless:
                     return GetScorelessStreak;
+                case ReportType.ConcedingGoals:
+                    return GetConcedingGoalsStreak;
                 default:
                     return GetWinningStreak;
             }
@@ -212,10 +216,22 @@ namespace Ranking.Application.Implementations
                         (match.Team2ID == team.Id && match.GoalsTeam1 == 0));
         }
 
+        private bool GetScoringGoalsStreak(Match match, Team team)
+        {
+            return ((match.Team1ID == team.Id && match.GoalsTeam1 > 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam2 > 0));
+        }
+
         private bool GetScorelessStreak(Match match, Team team)
         {
             return ((match.Team1ID == team.Id && match.GoalsTeam1 == 0) ||
                         (match.Team2ID == team.Id && match.GoalsTeam2 == 0));
+        }
+
+        private bool GetConcedingGoalsStreak(Match match, Team team)
+        {
+            return ((match.Team1ID == team.Id && match.GoalsTeam2 > 0) ||
+                        (match.Team2ID == team.Id && match.GoalsTeam1 > 0));
         }
     }
 }

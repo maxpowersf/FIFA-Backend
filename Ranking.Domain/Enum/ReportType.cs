@@ -11,6 +11,8 @@ namespace Ranking.Domain.Enum
         Losing = 3,
         Winningless = 4,
         CleanSheets = 5,
-        Scoreless = 6
+        Scoreless = 6,
+        ScoringGoals = 7,
+        ConcedingGoals = 8
     }
 }
