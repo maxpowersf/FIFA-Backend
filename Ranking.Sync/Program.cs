@@ -68,6 +68,8 @@ namespace Ranking.Sync
             services.AddTransient<IPlayerRepository, PlayerRepository>();
             services.AddTransient<ITournamentTypeRepository, TournamentTypeRepository>();
             services.AddTransient<IGoalscorerRepository, GoalscorerRepository>();
+            services.AddTransient<IMatchRepository, MatchRepository>();
+            services.AddTransient<IPositionRepository, PositionRepository>();
         }
 
         private static void ConfigureApplicationServices(IServiceCollection services)
