@@ -9,6 +9,7 @@ namespace Ranking.API.DTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
+        public string FullName { get; set; }
         public int Position { get; set; }
         public int TeamID { get; set; }
         public int Dorsal { get; set; }
