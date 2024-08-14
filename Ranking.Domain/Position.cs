@@ -14,6 +14,7 @@ namespace Ranking.Domain
         public string TeamName { get { return Team != null ? Team.Name : null; } }
         public string Result { get; set; }
         public int NoPosition { get; set; }
+        public int Points { get { return Wins * 3 + Draws; } }
         public int GamesPlayed { get; set; }
         public int Wins { get; set; }
         public int Draws { get; set; }

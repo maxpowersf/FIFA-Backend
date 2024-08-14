@@ -27,6 +27,7 @@ namespace Ranking.Data.Repositories
         {
             var tournamentList = await _ctx.Tournaments
                                         .Include(e => e.TournamentType)
+                                            .ThenInclude(e => e.MatchType)
                                         .Include(e => e.Confederation)
                                         .OrderBy(e => e.Year)
                                         .ThenBy(e => e.TournamentType.Name)

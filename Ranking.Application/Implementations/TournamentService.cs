@@ -349,35 +349,37 @@ namespace Ranking.Application.Implementations
                     if (thirdPlaceMatch.GoalsTeam1 > thirdPlaceMatch.GoalsTeam2 || (thirdPlaceMatch.PenaltiesTeam1 > thirdPlaceMatch.PenaltiesTeam2))
                     {
                         team1.NoPosition = 3;
-                        team1.Result = "Tercero";
+                        team1.Result = "Third Place";
                         team2.NoPosition = 4;
-                        team2.Result = "Cuarto";
+                        team2.Result = "Fourth Place";
                     }
                     else if (thirdPlaceMatch.GoalsTeam2 > thirdPlaceMatch.GoalsTeam1 || (thirdPlaceMatch.PenaltiesTeam2 > thirdPlaceMatch.PenaltiesTeam1))
                     {
                         team2.NoPosition = 3;
-                        team2.Result = "Tercero";
+                        team2.Result = "Third Place";
                         team1.NoPosition = 4;
-                        team1.Result = "Cuarto";
+                        team1.Result = "Fourth Place";
                     }
                 }
 
                 var finalMatch = matches.FirstOrDefault(e => e.MatchRound == MatchRound.Final);
-                var finalteam1 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team1ID);
-                var finalteam2 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team2ID);
-                if (finalMatch.GoalsTeam1 > finalMatch.GoalsTeam2 || (finalMatch.PenaltiesTeam1 > finalMatch.PenaltiesTeam2))
-                {
-                    finalteam1.NoPosition = 1;
-                    finalteam1.Result = "Campeón";
-                    finalteam2.NoPosition = 2;
-                    finalteam2.Result = "Sub Campeón";
-                }
-                else if (finalMatch.GoalsTeam2 > finalMatch.GoalsTeam1 || (finalMatch.PenaltiesTeam2 > finalMatch.PenaltiesTeam1))
-                {
-                    finalteam2.NoPosition = 1;
-                    finalteam2.Result = "Campeón";
-                    finalteam1.NoPosition = 2;
-                    finalteam1.Result = "Sub Campeón";
+                if (finalMatch != null) {
+                    var finalteam1 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team1ID);
+                    var finalteam2 = positions.FirstOrDefault(e => e.Team.Id == finalMatch.Team2ID);
+                    if (finalMatch.GoalsTeam1 > finalMatch.GoalsTeam2 || (finalMatch.PenaltiesTeam1 > finalMatch.PenaltiesTeam2))
+                    {
+                        finalteam1.NoPosition = 1;
+                        finalteam1.Result = "Champion";
+                        finalteam2.NoPosition = 2;
+                        finalteam2.Result = "Runner Up";
+                    }
+                    else if (finalMatch.GoalsTeam2 > finalMatch.GoalsTeam1 || (finalMatch.PenaltiesTeam2 > finalMatch.PenaltiesTeam1))
+                    {
+                        finalteam2.NoPosition = 1;
+                        finalteam2.Result = "Champion";
+                        finalteam1.NoPosition = 2;
+                        finalteam1.Result = "Runner Up";
+                    }
                 }
             }
 

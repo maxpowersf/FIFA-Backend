@@ -49,9 +49,9 @@ namespace Ranking.API.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] PositionsArrayDTO positionsDTO)
+        public async Task<IActionResult> Add([FromBody] List<PositionDTO> positionsDTO)
         {
-            await _positionService.Add(_mapper.Map<List<Position>>(positionsDTO.Position));
+            await _positionService.Add(_mapper.Map<List<Position>>(positionsDTO));
             return new OkObjectResult(true);
         }
 

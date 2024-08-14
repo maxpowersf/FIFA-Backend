@@ -15,6 +15,7 @@ namespace Ranking.Domain
         public int TeamID { get; set; }
         public Team Team { get; set; }
         public int Dorsal { get; set; }
+        public int TotalGoals { get { return QualificationGoals + ConfederationTournamentGoals + ConfederationsGoals + WorldCupGoals; } }
         public int QualificationGoals { get; set; }
         public int ConfederationTournamentGoals { get; set; }
         public int ConfederationsGoals { get; set; }

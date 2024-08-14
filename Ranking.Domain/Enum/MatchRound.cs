@@ -13,9 +13,9 @@ namespace Ranking.Domain.Enum
         Group = 2,
         [Description("Round of 16")]
         Round16 = 3,
-        [Description("Quarter Final")]
+        [Description("Quarterfinal")]
         Quarterfinal = 4,
-        [Description("Semi Final")]
+        [Description("Semifinal")]
         Semifinal = 5,
         [Description("Third Place")]
         ThirdPlace = 6,

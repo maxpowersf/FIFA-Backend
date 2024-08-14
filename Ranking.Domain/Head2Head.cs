@@ -17,5 +17,6 @@ namespace Ranking.Domain
         public int Loses { get; set; }
         public int GoalsFavor { get; set; }
         public int GoalsAgainst { get; set; }
+        public int GoalDifference { get { return GoalsFavor - GoalsAgainst; } }
     }
 }

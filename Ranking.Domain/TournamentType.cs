@@ -12,6 +12,7 @@ namespace Ranking.Domain
         public int MatchTypeID { get; set; }
         public MatchType MatchType { get; set; }
         public string MatchTypeName { get { return MatchType != null ? MatchType.Name : null; } }
+        public decimal? MatchTypeWeight { get { return MatchType?.Weight; } }
         public TournamentFormat Format { get; set; }
         public string FormatName { get { return Format.ToString(); } }
         public int? ConfederationID { get; set; }

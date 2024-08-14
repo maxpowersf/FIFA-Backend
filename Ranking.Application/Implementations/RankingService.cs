@@ -167,7 +167,10 @@ namespace Ranking.Application.Implementations
             foreach(Team team in teams)
             {
                 int year = team.Ranking3.Year + 4;
-                decimal newPoints = (team.Ranking2.Points * Convert.ToDecimal(0.25)) + (team.Ranking3.Points * Convert.ToDecimal(0.5));
+                decimal firstPeriodPoints = team.Ranking2?.Points ?? 0;
+                decimal secondPeriodPoints = team.Ranking3?.Points ?? 0;
+                decimal newPoints = (firstPeriodPoints > 0 ? firstPeriodPoints * Convert.ToDecimal(0.25) : 0) 
+                    + (secondPeriodPoints > 0 ? secondPeriodPoints * Convert.ToDecimal(0.5) : 0);
 
                 Domain.Ranking ranking = new Domain.Ranking()
                 {
